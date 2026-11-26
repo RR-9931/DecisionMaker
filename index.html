@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>事后诸葛亮</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#F2ECDF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#13110E" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="事后诸葛亮">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.5/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ECEFF4; --sheet:#F4F6FA; --card:#FFFFFF; --ink:#1A2238; --ink-soft:#465071; --muted:#7A8299;
+  --line:#D5DAE4; --indigo:#2B3A67; --indigo-soft:#DFE5F3;
+  --pro:#3B7553; --pro-soft:#E4F0E8; --con:#983247; --con-soft:#F6E5E9;
+  --seal:#B8321F; --gold:#A88633; --pouch:#24315C; --pouch-ink:#EEF0F8; --pouch-gold:#CDB16C;
+  --brush:"Ma Shan Zheng","STKaiti","KaiTi","Kaiti SC",serif;
+  --serif:"Noto Serif SC","Songti SC","SimSun",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1426; --sheet:#151B31; --card:#192039; --ink:#E7EAF3; --ink-soft:#B6BDD2; --muted:#8890A9;
+    --line:#2B3352; --indigo:#A3B4EA; --indigo-soft:#232C4C;
+    --pro:#80C59C; --pro-soft:#17291F; --con:#E58C9E; --con-soft:#2E1A22;
+    --seal:#D9503A; --gold:#D3B061; --pouch:#26346A; --pouch-ink:#EEF0F8; --pouch-gold:#D9BE78; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1426; --sheet:#151B31; --card:#192039; --ink:#E7EAF3; --ink-soft:#B6BDD2; --muted:#8890A9;
+  --line:#2B3352; --indigo:#A3B4EA; --indigo-soft:#232C4C;
+  --pro:#80C59C; --pro-soft:#17291F; --con:#E58C9E; --con-soft:#2E1A22;
+  --seal:#D9503A; --gold:#D3B061; --pouch:#26346A; --pouch-ink:#EEF0F8; --pouch-gold:#D9BE78; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+img{max-width:100%}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--paper) 86%,transparent);-webkit-backdrop-filter:blur(12px) saturate(1.3);backdrop-filter:blur(12px) saturate(1.3);border-bottom:1px solid var(--line)}
+.bar-in{max-width:760px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.logo{font-family:var(--brush);font-size:27px;line-height:1;color:var(--ink);text-decoration:none;margin-right:auto}
+.nav{display:flex;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px}
+.nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;padding:4px 12px;border-radius:999px}
+.nav a[aria-current="page"]{background:var(--ink);color:var(--paper)}
+.sync{font-size:12px;color:var(--muted)}
+
+main{max-width:760px;margin:0 auto;padding:12px 16px 90px}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.3;margin:0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.stamp-date{font-size:12px;color:var(--muted)}
+
+.hero{position:relative;padding:40px 0 30px;overflow:hidden}
+.hero h1{position:relative;z-index:1;white-space:nowrap;font-family:var(--brush);font-weight:400;font-size:clamp(52px,16vw,118px);line-height:1;letter-spacing:.02em}
+.hero .fan{position:absolute;right:-34px;top:-6px;width:min(60vw,270px);color:var(--gold);opacity:.32;transform:rotate(16deg);z-index:0;pointer-events:none}
+.hero p{position:relative;z-index:1;max-width:22em;color:var(--ink-soft);margin:16px 0 22px;font-size:17px}
+.hero .actions{position:relative;z-index:1}
+
+.btn{display:inline-block;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:999px;font-weight:600;text-decoration:none;line-height:1.4;transition:transform .12s ease,opacity .12s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line)}
+.btn.small{padding:6px 14px;font-size:14px}
+.btn.danger{background:transparent;color:var(--con);border-color:color-mix(in srgb,var(--con) 50%,transparent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.link{background:none;border:0;padding:0;color:var(--indigo);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+
+.group{margin-top:28px}
+.group>h2{font-size:15px;font-weight:500;color:var(--muted);margin-bottom:10px}
+.entry{display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;transition:border-color .15s}
+.entry:hover{border-color:var(--indigo)}
+.entry h3{font-size:18px}
+.entry .meta{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:13px;color:var(--muted);margin-top:4px}
+.db{flex:0 0 54px;text-align:center;border-right:1px solid var(--line);padding-right:12px;line-height:1.15}
+.db .m{display:block;font-size:12px;color:var(--muted)}
+.db .d{display:block;font-family:var(--serif);font-size:26px;font-weight:700}
+.db.sealed .d{color:var(--seal)}
+.db.none .d{color:var(--muted);font-size:18px}
+.eb{flex:1;min-width:0}
+.due{color:var(--seal);font-weight:600}
+.empty{padding:18px 0;color:var(--ink-soft)}
+
+label.f{display:block;font-size:14px;color:var(--ink-soft);margin:18px 0 6px;font-weight:600}
+input[type=text],input[type=date],textarea{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;transition:border-color .15s,box-shadow .15s}
+input[type=text]:focus,input[type=date]:focus,textarea:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
+textarea{min-height:84px;resize:none;overflow:hidden;field-sizing:content;line-height:1.6}
+.row{display:flex;gap:8px;align-items:center}
+.row>input{flex:1}
+.x{background:none;border:0;color:var(--muted);font-size:20px;line-height:1;padding:4px 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;font-size:14px;text-align:left}
+.chip[aria-pressed="true"]{background:var(--indigo);border-color:var(--indigo);color:var(--paper)}
+.chip small{opacity:.75;margin-left:4px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;align-items:center}
+
+/* decision head */
+.dhead{padding:16px 0 4px}
+.dhead h1{font-size:clamp(26px,7vw,38px)}
+.status{display:inline-block;font-size:12px;border-radius:999px;padding:2px 10px;background:var(--indigo-soft);color:var(--indigo);margin-bottom:10px;font-weight:600}
+.status.sealed{background:transparent;color:var(--seal);box-shadow:inset 0 0 0 1px var(--seal)}
+.stepper{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);padding:0;margin:24px 0 0}
+.stepper li{position:relative;text-align:center;font-size:11px;color:var(--muted);padding-top:22px;line-height:1.4}
+.stepper li::before{content:"";position:absolute;top:6px;left:-50%;right:50%;height:2px;background:var(--line)}
+.stepper li:first-child::before{display:none}
+.stepper li.done::before{background:var(--indigo)}
+.stepper .dot{position:absolute;top:0;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--paper);border:2px solid var(--line);z-index:1}
+.stepper li.done .dot{background:var(--indigo);border-color:var(--indigo)}
+.stepper b{display:block;font-size:13px;color:var(--ink-soft);font-weight:600}
+.stepper li.done b{color:var(--ink)}
+
+.step{margin-top:44px}
+.step-h{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.step-h .n{flex:none;width:50px;height:50px;border-radius:50%;background:var(--indigo);color:var(--paper);font-family:var(--brush);font-size:30px;line-height:1;display:grid;place-items:center}
+.step-h .sh{flex:1;min-width:0}
+.step-h h2{font-size:22px}
+.step-h .stamp-date{display:block}
+.context{white-space:pre-wrap;color:var(--ink-soft);margin:0 0 12px}
+.optpills{display:flex;flex-wrap:wrap;gap:8px}
+.optpill{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 12px;font-family:var(--serif);font-weight:500}
+.optpill+.optpill::before{content:none}
+
+/* options */
+.option{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:16px;overflow:hidden}
+.option-h{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--sheet);border-bottom:1px solid var(--line)}
+.option-h h3{font-size:20px;flex:1}
+.total{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--muted)}
+.total.pos{color:var(--pro)} .total.neg{color:var(--con)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:14px 16px 16px}
+@media (max-width:620px){.cols{grid-template-columns:1fr}}
+.side h4{margin:0 0 8px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
+.side h4::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.side.pro h4{color:var(--pro)} .side.con h4{color:var(--con)}
+.item{border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.side.pro .item{background:var(--pro-soft)} .side.con .item{background:var(--con-soft)}
+.side .item.mirror{background:transparent;border:1px dashed var(--line)}
+.item-top{display:flex;gap:10px;align-items:flex-start}
+.item-text{flex:1}
+.item-top textarea.item-ta{flex:1;min-height:0;background:transparent;border:0;border-radius:0;padding:1px 0;font-size:16px;line-height:1.5;box-shadow:none}
+.item-top textarea.item-ta:focus{box-shadow:none;border-bottom:1px dashed var(--line)}
+.badge{flex:none;min-width:36px;height:28px;padding:0 9px;border-radius:999px;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:15px;color:var(--paper)}
+.side.pro .badge{background:var(--pro)} .side.con .badge{background:var(--con)}
+.side .badge.none{background:var(--line);color:var(--ink-soft)}
+.side .badge.ghost{background:transparent;color:var(--muted);border:1px dashed var(--line);font-family:var(--sans);font-size:12px;font-weight:600}
+.item-sub{font-size:12px;color:var(--ink-soft);margin-top:3px;display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline}
+.formula{color:var(--muted)}
+.more{background:none;border:0;padding:0;font-size:12px;color:var(--indigo);text-decoration:underline;text-underline-offset:3px;margin-left:auto}
+.item-more{margin-top:10px;padding-top:10px;border-top:1px solid color-mix(in srgb,var(--ink) 10%,transparent)}
+.item-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px}
+.x-del{background:none;border:0;color:var(--con);font-size:12px;padding:0}
+.dim{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:6px;flex-wrap:wrap}
+.dim .dn{min-width:4.5em;color:var(--ink-soft)}
+.pips{display:inline-flex;gap:4px}
+.pip{width:30px;height:28px;border:1px solid var(--line);background:var(--card);border-radius:8px;font-size:13px;padding:0;color:var(--ink-soft)}
+.side.pro .pip[aria-pressed="true"]{background:var(--pro);border-color:var(--pro);color:var(--paper)}
+.side.con .pip[aria-pressed="true"]{background:var(--con);border-color:var(--con);color:var(--paper)}
+.dim .sv{color:var(--ink-soft)}
+.mirror-note{font-size:12px;color:var(--muted);margin-top:6px}
+.linkto{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;font-size:13px}
+.add{display:flex;gap:6px;margin-top:4px}
+.add input{flex:1;padding:7px 14px;font-size:14px;border-radius:999px}
+
+.compare,.fwrap{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-top:4px}
+.fwrap{margin-top:12px;overflow-x:auto}
+.cmp{display:grid;grid-template-columns:minmax(70px,28%) 1fr 3.5em;gap:10px;align-items:center;margin:8px 0;font-size:14px}
+.track{height:10px;background:var(--sheet);border-radius:999px;position:relative;overflow:hidden}
+.fill{position:absolute;top:0;bottom:0;border-radius:999px}
+.fill.pos{background:var(--pro)} .fill.neg{background:var(--con)}
+.track::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--line)}
+.factors{width:100%;border-collapse:collapse;font-size:14px}
+.factors th,.factors td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+.factors tr:last-child td{border-bottom:0}
+.factors th{font-weight:600;color:var(--ink-soft);font-size:13px}
+.cell-pro{color:var(--pro);font-weight:600}.cell-con{color:var(--con);font-weight:600}
+
+/* interview */
+.qa{border-left:2px solid var(--indigo-soft);padding:2px 0 8px 12px;margin:10px 0}
+.qa .q{font-family:var(--serif);font-weight:500}
+.qa .a{white-space:pre-wrap;color:var(--ink-soft);margin-top:4px}
+.question{font-family:var(--serif);font-size:19px;line-height:1.6;margin:8px 0 12px;white-space:pre-wrap;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--indigo);border-radius:12px;padding:14px 16px}
+.sum{display:grid;gap:10px}
+.sum-sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.sum-sec h4{margin:0 0 4px;font-family:var(--serif);font-size:15px;color:var(--indigo)}
+.sum-sec p{margin:0;white-space:pre-wrap;color:var(--ink-soft)}
+.sum-sec.verdict{background:var(--indigo);border-color:var(--indigo)}
+.sum-sec.verdict h4{color:var(--paper);opacity:.8}
+.sum-sec.verdict p{color:var(--paper)}
+.open-q{margin:12px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.open-q .q{font-family:var(--serif);font-weight:500;margin-bottom:8px}
+.open-q textarea{min-height:56px}
+.note{font-size:14px;color:var(--ink-soft);background:var(--indigo-soft);border-radius:10px;padding:10px 14px;margin:12px 0}
+.err{color:var(--con)}
+
+/* pouch */
+.pouch{position:relative;margin-top:28px;padding:30px 24px 24px;border-radius:8px 8px 26px 26px;background-color:var(--pouch);color:var(--pouch-ink);
+  background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 1px,transparent 1px 13px),repeating-linear-gradient(-45deg,rgba(255,255,255,.04) 0 1px,transparent 1px 13px)}
+.pouch::before{content:"";position:absolute;inset:9px;border:1px solid var(--pouch-gold);border-radius:4px 4px 19px 19px;opacity:.5;pointer-events:none}
+.pouch::after{content:"";position:absolute;left:50%;top:-14px;width:76px;height:18px;margin-left:-38px;border:2px solid var(--pouch-gold);border-bottom:0;border-radius:50px 50px 0 0}
+.pouch .label{font-size:13px;color:var(--pouch-gold)}
+.pouch .chosen{font-family:var(--serif);font-size:28px;font-weight:700;margin-top:2px;padding-right:76px;color:#fff}
+.pouch dl{margin:0;position:relative}
+.pouch dt{font-size:13px;color:var(--pouch-gold);margin-top:14px}
+.pouch dd{margin:2px 0 0;white-space:pre-wrap}
+.seal{position:absolute;right:20px;top:20px;width:60px;height:60px;background:var(--seal);color:#FBEDE8;font-family:var(--brush);font-size:36px;display:grid;place-items:center;transform:rotate(-8deg);border-radius:6px;line-height:1;box-shadow:inset 0 0 0 3px var(--seal),inset 0 0 0 5px rgba(255,255,255,.55)}
+.conf{display:flex;align-items:center;gap:12px}
+.conf input{flex:1;accent-color:var(--indigo)}
+.conf output{font-family:var(--serif);font-weight:700;font-size:20px;min-width:3.2em;text-align:right}
+.vcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:10px}
+.vcard.latest{border-color:var(--indigo)}
+.vhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.vchoice{font-family:var(--serif);font-size:19px;font-weight:700;margin-top:2px}
+.vconf{text-align:right;font-family:var(--serif);font-weight:700;font-size:20px;line-height:1.1;flex:none}
+.vconf .stamp-date{display:block;font-family:var(--sans);font-weight:400}
+.vreason{margin:6px 0 0;color:var(--ink-soft);white-space:pre-wrap}
+.vreason.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vdl{margin:4px 0 0}.vdl dt{font-size:13px;color:var(--muted);margin-top:8px}.vdl dd{margin:2px 0 0;white-space:pre-wrap}
+.vcard .actions{margin-top:10px}
+.condbox{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px;background:var(--sheet)}
+.cond-h{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.cond-h b{font-family:var(--serif);font-size:17px}
+.cond-h .chips{gap:4px}
+.chip.sm{padding:3px 10px;font-size:12px}
+.cond-item{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.cond-item input{flex:1;padding:7px 10px}
+.cn{color:var(--indigo);font-weight:700;flex:none}
+.tick{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;background:none;border:0;padding:9px 0;border-top:1px solid var(--line)}
+.tick .box{flex:none;width:22px;height:22px;margin-top:1px;border:2px solid var(--muted);border-radius:6px;display:grid;place-items:center;font-size:14px;font-weight:700;color:var(--paper)}
+.tick[aria-pressed="true"] .box{background:var(--pro);border-color:var(--pro)}
+.tick .tt{flex:1}
+.tick .stamp-date{display:block}
+.tick:disabled{cursor:default}
+.trigger{background:var(--indigo);color:var(--paper);border-radius:14px;padding:14px 16px;margin:14px 0 4px}
+.trigger .label{font-size:13px;opacity:.8}
+.trigger .chosen{font-family:var(--serif);font-size:24px;font-weight:700}
+.trigger .stamp-date{color:var(--paper);opacity:.8}
+.trigger p{margin:6px 0 0;white-space:pre-wrap}
+.rules{margin-top:6px;position:relative}
+.rule{border-top:1px dashed rgba(205,177,108,.45);padding:9px 0}
+.rule-if{color:var(--pouch-gold);font-size:13px}
+.rule ol{margin:4px 0;padding-left:1.4em}
+.rule-then{font-family:var(--serif);font-weight:700;font-size:17px}
+details.manual{margin-top:14px}
+details.manual summary{cursor:pointer;font-size:13px;color:var(--muted)}
+.sealbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px 16px 18px}
+
+/* reviews */
+.review{padding:14px 0;border-top:1px solid var(--line)}
+.review h3{font-size:17px}
+.rv-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 16px 14px;margin:10px 0 0}
+.rv-card dt{font-size:13px;color:var(--muted);margin-top:10px}
+.rv-card dd{margin:2px 0 0;white-space:pre-wrap}
+.quad{display:inline-block;margin-top:8px;font-weight:600;color:var(--indigo)}
+.rate{display:flex;gap:6px;flex-wrap:wrap}
+.rate .pip{width:40px;height:34px}
+.rate .pip[aria-pressed="true"]{background:var(--indigo);border-color:var(--indigo);color:var(--paper)}
+
+details.log{margin-top:44px;font-size:14px}
+details.log summary{cursor:pointer;color:var(--ink-soft)}
+details.log li{color:var(--muted)}
+.lockscreen{max-width:340px;margin:8vh auto 0;text-align:center}
+.lockscreen h1{font-family:var(--brush);font-weight:400;font-size:52px;line-height:1.1;margin-top:18px}
+.lockscreen input{text-align:center;font-size:20px;letter-spacing:.2em;margin-top:18px;border-radius:999px}
+.lockscreen .note{text-align:left}
+.lock-seal{width:76px;height:76px;margin:0 auto;background:var(--seal);color:#FBEDE8;font-family:var(--brush);font-size:46px;display:grid;place-items:center;transform:rotate(-6deg);border-radius:8px;line-height:1;box-shadow:inset 0 0 0 3px var(--seal),inset 0 0 0 6px rgba(255,255,255,.55)}
+body.locked .nav,body.locked main,body.locked .lockbtn{visibility:hidden}
+#lock{position:fixed;inset:0;z-index:50;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:calc(24px + env(safe-area-inset-top,0px)) 24px calc(24px + env(safe-area-inset-bottom,0px));overflow-y:auto}
+#lock[hidden],#lock [hidden]{display:none!important}
+#lock .lk-ttl{font-family:var(--serif);font-size:22px;font-weight:700;margin-top:4px}
+#lock .dots{display:flex;gap:14px;height:18px;align-items:center}
+#lock .dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--muted)}
+#lock .dots i.on{background:var(--indigo);border-color:var(--indigo)}
+#lock .msg{min-height:20px;font-size:14px;color:var(--seal)}
+#lock .pad{display:grid;grid-template-columns:repeat(3,72px);gap:14px}
+#lock .pad button{width:72px;height:72px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-family:var(--serif);font-size:26px;color:var(--ink);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+#lock .pad button:active{background:var(--indigo-soft)}
+#lock .pad button.fn{background:none;border:0;box-shadow:none;font-family:var(--sans);font-size:14px;color:var(--ink-soft)}
+#lock .lk-foot{display:flex;gap:14px;align-items:center}
+#lock .note{max-width:320px}
+#lock.shake .dots{animation:sh .35s}
+@keyframes sh{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.lockset select{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.lockbtn{background:none;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13px;color:var(--ink-soft)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-size:14px;z-index:20;max-width:90vw;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+@media (prefers-reduced-motion:no-preference){
+  .seal.fresh{animation:stamp .55s ease-out}
+  @keyframes stamp{0%{transform:rotate(-8deg) scale(2.4);opacity:0}70%{transform:rotate(-8deg) scale(.92);opacity:1}100%{transform:rotate(-8deg) scale(1)}}
+}
+
+/* =================== 古风 redesign =================== */
+:root{
+  --paper:#F2ECDF; --sheet:#E9E1CF; --card:#FBF7EE; --ink:#1F1B15; --ink-soft:#4B4337; --muted:#8B8170;
+  --line:#DCD1BB; --indigo:#2F4A5C; --indigo-soft:#E2E4DC;
+  --pro:#3D6A4D; --pro-soft:#E5EBDC; --con:#9E2F3A; --con-soft:#F3E2DA;
+  --seal:#B5301D; --gold:#A27E36; --pouch:#2B3A4C; --pouch-ink:#F1ECE0; --pouch-gold:#CBA75B;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.32 0 0 0 0 0.18 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E"); --shadow:0 1px 0 rgba(255,255,255,.6) inset,0 10px 24px -16px rgba(70,45,10,.45);
+  --barh:58px; --ease:cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#13110E; --sheet:#1B1814; --card:#211D18; --ink:#EEE7D7; --ink-soft:#BFB5A2; --muted:#8D8473;
+  --line:#383028; --indigo:#A3BBC8; --indigo-soft:#27303A;
+  --pro:#8DC197; --pro-soft:#1B291F; --con:#E69494; --con-soft:#33201F;
+  --seal:#D8533A; --gold:#D4B064; --pouch:#24344A; --pouch-ink:#F1ECE0; --pouch-gold:#D8B86E;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.85 0 0 0 0 0.75 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E"); --shadow:0 12px 28px -18px rgba(0,0,0,.85);
+}}
+:root[data-theme="dark"]{
+  --paper:#13110E; --sheet:#1B1814; --card:#211D18; --ink:#EEE7D7; --ink-soft:#BFB5A2; --muted:#8D8473;
+  --line:#383028; --indigo:#A3BBC8; --indigo-soft:#27303A;
+  --pro:#8DC197; --pro-soft:#1B291F; --con:#E69494; --con-soft:#33201F;
+  --seal:#D8533A; --gold:#D4B064; --pouch:#24344A; --pouch-ink:#F1ECE0; --pouch-gold:#D8B86E;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.85 0 0 0 0 0.75 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E"); --shadow:0 12px 28px -18px rgba(0,0,0,.85);
+}
+body{background-image:var(--grain);background-attachment:fixed}
+h1,h2,h3{letter-spacing:.01em}
+
+/* top bar */
+.bar{background:color-mix(in srgb,var(--paper) 82%,transparent);border-bottom:1px solid var(--line);box-shadow:0 3px 0 -2px var(--line)}
+.logo{display:inline-flex;align-items:center;gap:9px;font-size:25px}
+.logo::before{content:"亮";display:grid;place-items:center;width:30px;height:30px;background:var(--seal);color:#FBEDE6;font-size:21px;border-radius:5px;transform:rotate(-6deg);box-shadow:inset 0 0 0 2px var(--seal),inset 0 0 0 3.5px rgba(255,255,255,.5)}
+.nav{background:var(--card);box-shadow:var(--shadow)}
+.nav a{transition:background .2s,color .2s}
+.nav a[aria-current="page"]{background:var(--ink);color:var(--paper)}
+.lockbtn{background:var(--card)}
+
+/* hero */
+.hero{padding:46px 0 34px}
+.hero-v{position:absolute;right:6px;top:30px;writing-mode:vertical-rl;font-family:var(--brush);font-size:22px;letter-spacing:.35em;color:var(--seal);opacity:.55;z-index:1}
+.hero .fan{right:-26px;top:-2px;opacity:.28;transform-origin:50% 92%}
+.hero p{font-family:var(--serif);font-weight:500;max-width:min(22em,calc(100% - 46px))}
+.hero h1{max-width:calc(100% - 40px)}
+@media (prefers-reduced-motion:no-preference){.hero .fan{animation:sway 9s ease-in-out infinite}@keyframes sway{0%,100%{transform:rotate(14deg)}50%{transform:rotate(19deg)}}}
+
+/* buttons */
+.btn{box-shadow:var(--shadow);transition:transform .15s var(--ease),background .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:scale(.96)}
+.btn.vermilion{background:var(--seal);border-color:var(--seal);color:#FFF5EF;font-family:var(--serif);letter-spacing:.08em}
+.chip{transition:background .18s,color .18s,transform .15s}
+.chip:active,.pip:active{transform:scale(.92)}
+.pip{transition:background .15s,transform .15s}
+.pip[aria-pressed="true"]{animation:none}
+
+/* home */
+.group>h2{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink-soft);margin-bottom:12px}
+.group>h2::before{content:"";width:9px;height:9px;background:var(--seal);transform:rotate(45deg)}
+.group>h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.entry{border-radius:14px;box-shadow:var(--shadow);transition:transform .2s var(--ease),border-color .2s,box-shadow .2s;position:relative;overflow:hidden}
+.entry:hover{transform:translateY(-2px);border-color:var(--gold)}
+.entry::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line)}
+.db{border-right:1px dashed var(--line)}
+.db .d{font-family:var(--brush);font-weight:400;font-size:32px}
+.db.sealed .d{color:var(--seal)}
+.entry:has(.db.sealed)::after{background:var(--seal)}
+.entry h3{font-size:18px}
+
+/* decision head */
+.back{display:inline-flex;align-items:center;gap:4px;color:var(--muted);text-decoration:none;font-size:14px;margin:14px 0 6px}
+.back:hover{color:var(--ink)}
+.dhead{padding:4px 0 0;display:flex;gap:12px;align-items:flex-start}
+.dhead .dh-main{flex:1;min-width:0}
+.dhead h1{font-size:clamp(25px,6.4vw,36px)}
+.dtools{flex:none;display:flex;gap:6px;margin-top:4px}
+.status{font-family:var(--serif)}
+
+/* step tabs */
+.steptabs{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--barh) - 1px);z-index:4;margin:16px -16px 0;padding:8px 12px 9px;background:color-mix(in srgb,var(--paper) 88%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.st-in{max-width:728px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;position:relative}
+.st-in::before{content:"";position:absolute;left:10%;right:10%;top:23px;height:1px;background:var(--line);z-index:0}
+.st{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid transparent;background:none;border-radius:12px;padding:5px 2px 6px;color:var(--muted);transition:background .2s,border-color .2s}
+.st-n{width:36px;height:36px;border-radius:8px;display:grid;place-items:center;font-family:var(--brush);font-size:21px;line-height:1;border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);transition:all .25s var(--ease)}
+.st.done .st-n{border-color:var(--indigo);color:var(--indigo)}
+.st.done .st-n::after{content:"";position:absolute;top:3px;right:calc(50% - 22px);width:9px;height:9px;border-radius:50%;background:var(--pro);border:2px solid var(--paper)}
+.st.cur{background:var(--card);border-color:var(--line);box-shadow:var(--shadow)}
+.st.cur .st-n{background:var(--seal);border-color:var(--seal);color:#FFF3EC;transform:rotate(-6deg) scale(1.06)}
+.st-t{font-size:13px;font-weight:700;color:var(--ink-soft);font-family:var(--serif)}
+.st.cur .st-t{color:var(--ink)}
+.st-d{font-size:10.5px;white-space:nowrap}
+.st:disabled{opacity:.38;cursor:not-allowed}
+
+/* step body */
+.step{margin-top:26px}
+.step-h{gap:14px;margin-bottom:18px}
+.step-h .n{width:52px;height:52px;border-radius:9px;background:transparent;color:var(--seal);border:2.5px solid var(--seal);font-size:32px;transform:rotate(-5deg);box-shadow:inset 0 0 0 3px var(--paper),inset 0 0 0 4px color-mix(in srgb,var(--seal) 50%,transparent)}
+.step-h h2{font-size:25px}
+.stepnav{display:flex;justify-content:space-between;gap:10px;margin-top:36px;padding-top:16px;border-top:1px dashed var(--line)}
+.stepnav .btn{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stepnav .sp{flex:1}
+.logpanel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:14px;box-shadow:var(--shadow);font-size:14px}
+.logpanel ul{margin:6px 0 0;padding-left:1.1em;max-height:300px;overflow:auto}
+.logpanel li{color:var(--muted);margin:3px 0}
+
+/* options & items */
+.option{border-radius:18px;box-shadow:var(--shadow);border-top:3px solid var(--line)}
+.option.pos{border-top-color:var(--pro)}.option.neg{border-top-color:var(--con)}
+.option-h{background:transparent;border-bottom:1px dashed var(--line);padding:14px 18px}
+.option-h h3{font-size:21px}
+.total{font-family:var(--brush);font-weight:400;font-size:32px;line-height:1}
+.item{border-left:3px solid transparent;border-radius:4px 12px 12px 4px}
+.side.pro .item{border-left-color:var(--pro)}.side.con .item{border-left-color:var(--con)}
+.badge{font-family:var(--brush);font-weight:400;font-size:19px;border-radius:50%;min-width:34px;height:34px;padding:0}
+.compare,.fwrap,.sealbox,.vcard,.sum-sec,.open-q,.question,.rv-card{box-shadow:var(--shadow)}
+.track{height:12px}
+.fill{transition:width .6s var(--ease),left .6s var(--ease)}
+
+/* summary verdict */
+.sum-sec.verdict{background:var(--pouch);border-color:var(--pouch);position:relative;overflow:hidden}
+.sum-sec.verdict h4{color:var(--pouch-gold);opacity:1}
+.sum-sec.verdict p{color:var(--pouch-ink)}
+.sum-sec.verdict::after{content:"断";position:absolute;right:12px;top:10px;font-family:var(--brush);font-size:26px;color:var(--seal);opacity:.9}
+
+/* pouch */
+.pouch{box-shadow:0 20px 40px -22px rgba(20,25,40,.8)}
+.trigger{background:var(--pouch);color:var(--pouch-ink)}
+.trigger .label{color:var(--pouch-gold);opacity:1}
+.trigger .stamp-date{color:var(--pouch-ink)}
+.tick .box{transition:background .2s,border-color .2s,transform .2s}
+.tick[aria-pressed="true"] .box{transform:scale(1.08)}
+
+/* page entrance (only when view changes) */
+@media (prefers-reduced-motion:no-preference){
+  #app.enter>*{animation:rise .5s var(--ease) both}
+  #app.enter>*:nth-child(2){animation-delay:.04s}#app.enter>*:nth-child(3){animation-delay:.08s}#app.enter>*:nth-child(4){animation-delay:.12s}#app.enter>*:nth-child(5){animation-delay:.16s}#app.enter>*:nth-child(n+6){animation-delay:.2s}
+  #app.enter .entry{animation:rise .5s var(--ease) both}
+  #app.enter .entry:nth-of-type(2){animation-delay:.06s}#app.enter .entry:nth-of-type(3){animation-delay:.12s}#app.enter .entry:nth-of-type(n+4){animation-delay:.18s}
+  #app.enter .hero h1{animation:brush 1s var(--ease) both}
+  #app.enter .hero-v{animation:fadein 1.2s .5s both}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes brush{from{clip-path:inset(0 100% 0 0);opacity:.3}to{clip-path:inset(0 0 0 0);opacity:1}}
+  @keyframes fadein{from{opacity:0}}
+  .trigger.fresh{animation:trig .7s var(--ease) both}
+  @keyframes trig{0%{opacity:0;transform:scale(.9)}60%{transform:scale(1.03)}100%{opacity:1;transform:none}}
+}
+
+/* lock screen */
+#lock{background-color:var(--paper);background-image:var(--grain)}
+#lock .lock-seal{width:92px;height:92px;font-size:56px;transition:transform .45s var(--ease)}
+#lock .lk-ttl{font-size:21px;letter-spacing:.1em}
+#lock .dots i{transition:background .15s,border-color .15s,transform .15s}
+#lock .dots i.on{background:var(--seal);border-color:var(--seal);transform:scale(1.1)}
+#lock .pad button{font-family:var(--serif);box-shadow:var(--shadow);transition:transform .1s,background .15s}
+#lock .pad button:active{transform:scale(.92);background:var(--seal);color:#fff;border-color:var(--seal)}
+#lock .pad button.fn:active{background:none;color:var(--ink)}
+#lock.opening{transition:opacity .5s .15s,transform .6s .15s var(--ease),filter .6s .15s;opacity:0;transform:scale(1.06);filter:blur(4px);pointer-events:none}
+#lock.opening .lock-seal{transform:rotate(-30deg) scale(1.25)}
+#lock.opening .dots i{background:var(--gold);border-color:var(--gold)}
+
+/* in-app confirm */
+#ask{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:24px;background:color-mix(in srgb,var(--ink) 35%,transparent);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+#ask[hidden]{display:none}
+.ask-box{width:min(360px,100%);background:var(--card);background-image:var(--grain);border:1px solid var(--line);border-top:3px solid var(--seal);border-radius:16px;padding:20px 20px 16px;box-shadow:0 24px 50px -20px rgba(0,0,0,.5)}
+.ask-box p{margin:0;white-space:pre-wrap;font-family:var(--serif);font-size:17px;line-height:1.6}
+.ask-box .actions{justify-content:flex-end}
+@media (prefers-reduced-motion:no-preference){#ask.show{animation:fadein .2s both}#ask.show .ask-box{animation:rise .3s var(--ease) both}}
+
+/* ceremony */
+#cere{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;cursor:pointer;transition:opacity .45s}
+#cere[hidden]{display:none}
+#cere.out{opacity:0}
+.c-wash{position:absolute;inset:0;background:radial-gradient(circle at 50% 46%,color-mix(in srgb,var(--paper) 70%,transparent) 0,color-mix(in srgb,var(--paper) 94%,transparent) 55%,var(--paper) 100%);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.c-stage{position:relative;width:180px;height:220px}
+.c-pouch{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 18px 22px rgba(20,25,40,.35))}
+.c-pouch .body{fill:var(--pouch);stroke:var(--pouch-gold);stroke-width:1.5;stroke-opacity:.7}.c-pouch .gold{fill:none;stroke:var(--pouch-gold);stroke-width:2}
+.c-pouch .cord{fill:none;stroke:var(--pouch-gold);stroke-width:4;stroke-linecap:round;stroke-dasharray:140;stroke-dashoffset:0}
+.c-stamp{position:absolute;left:50%;top:58%;width:76px;height:76px;margin:-38px 0 0 -38px;background:var(--seal);color:#FFF1EA;font-family:var(--brush);font-size:50px;line-height:1;display:grid;place-items:center;border-radius:8px;transform:rotate(-8deg);box-shadow:inset 0 0 0 3px var(--seal),inset 0 0 0 6px rgba(255,255,255,.55),0 6px 14px rgba(120,20,10,.35)}
+.c-ring{position:absolute;left:50%;top:58%;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;border:3px solid var(--seal);opacity:0}
+.c-text{position:relative;text-align:center}
+.c-text b{display:block;font-family:var(--brush);font-weight:400;font-size:42px;line-height:1.2;color:var(--ink)}
+.c-text span{display:block;margin-top:6px;color:var(--ink-soft);font-family:var(--serif)}
+.c-skip{position:absolute;bottom:calc(26px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){
+  #cere.run .c-wash{animation:fadein .35s both}
+  #cere.run .c-pouch{animation:drop .7s cubic-bezier(.25,1.4,.45,1) both}
+  #cere.run .c-pouch .cord{animation:cord .45s .55s both}
+  #cere.run .c-stamp{animation:slam .38s .95s cubic-bezier(.3,1.5,.5,1) both}
+  #cere.run .c-ring{animation:ring .8s 1.18s ease-out both}
+  #cere.run .c-stage{animation:quake .32s 1.2s both}
+  #cere.run .c-text b{animation:brush .7s 1.3s var(--ease) both}
+  #cere.run .c-text span,#cere.run .c-skip{animation:fadein .5s 1.75s both}
+  @keyframes drop{0%{opacity:0;transform:translateY(-90px) rotate(-8deg) scale(.85)}100%{opacity:1;transform:none}}
+  @keyframes cord{from{stroke-dashoffset:140}to{stroke-dashoffset:0}}
+  @keyframes slam{0%{opacity:0;transform:rotate(-24deg) scale(3.2)}100%{opacity:1;transform:rotate(-8deg) scale(1)}}
+  @keyframes ring{0%{opacity:.7;transform:scale(.5)}100%{opacity:0;transform:scale(2.6)}}
+  @keyframes quake{0%,100%{transform:none}25%{transform:translate(-5px,3px)}50%{transform:translate(4px,-3px)}75%{transform:translate(-2px,2px)}}
+}
+
+/* auth */
+#auth{position:fixed;inset:0;z-index:45;display:grid;place-items:center;padding:calc(24px + env(safe-area-inset-top,0px)) 18px calc(24px + env(safe-area-inset-bottom,0px));overflow-y:auto;background-color:var(--paper);background-image:var(--grain)}
+#auth[hidden]{display:none}
+.auth-card{width:min(400px,100%);background:var(--card);border:1px solid var(--line);border-top:3px solid var(--seal);border-radius:18px;padding:26px 22px 22px;box-shadow:var(--shadow);text-align:center}
+.auth-card .lock-seal{width:70px;height:70px;font-size:44px}
+.auth-card h1{font-family:var(--brush);font-weight:400;font-size:44px;margin:14px 0 4px}
+.auth-sub{color:var(--ink-soft);font-size:14px;line-height:1.7;margin:0 0 16px}
+#authForm{display:flex;flex-direction:column;gap:12px;text-align:left}
+#authForm label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink-soft);font-weight:600}
+#authForm input{font-size:16px}
+#cfgFields,#loginFields{display:flex;flex-direction:column;gap:12px}
+#cfgFields[hidden],#loginFields[hidden]{display:none}
+#authForm .btn{width:100%}
+.auth-msg{min-height:1.4em;margin:0;font-size:13px;color:var(--con);line-height:1.5}
+.auth-msg.ok{color:var(--pro)}
+.syncdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px;background:var(--muted)}
+.syncdot.ok{background:var(--pro)}.syncdot.err{background:var(--con)}.syncdot.wait{background:var(--gold)}
+.manualiv ol{margin:8px 0 4px;padding-left:1.3em;color:var(--ink-soft)}
+.manualiv ol li{margin:4px 0}
+.gasol{padding-left:1.3em;color:var(--ink-soft);font-size:14px}
+.gasol li{margin:6px 0}
+details.gasset{margin-top:10px}
+details.gasset summary{cursor:pointer;color:var(--indigo);font-weight:600}
+.banner{background:var(--con-soft);color:var(--con);border-radius:12px;padding:10px 14px;margin:12px 0 0;font-size:14px}
+</style>
+</head>
+<body>
+<section id="auth" hidden>
+  <div class="auth-card">
+    <div class="lock-seal" aria-hidden="true">亮</div>
+    <h1>事后诸葛亮</h1>
+    <p class="auth-sub" id="authSub">登入后，手机和 iPad 的决定会自动同步。</p>
+    <form id="authForm" autocomplete="on">
+      <div id="cfgFields" hidden>
+        <label>Supabase 项目网址<input id="cfgUrl" type="url" placeholder="https://xxxx.supabase.co" autocomplete="off"></label>
+        <label>Publishable key<input id="cfgKey" type="text" placeholder="sb_publishable_…" autocomplete="off"></label>
+      </div>
+      <div id="loginFields">
+        <label>电邮<input id="authEmail" type="email" autocomplete="username"></label>
+        <label>密码<input id="authPass" type="password" autocomplete="current-password" minlength="6"></label>
+      </div>
+      <p class="auth-msg" id="authMsg" role="alert"></p>
+      <button class="btn vermilion" id="authGo" type="submit">登入</button>
+      <button class="btn ghost" id="authSwitch" type="button">第一次用？注册账号</button>
+    </form>
+  </div>
+</section>
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+<header class="bar"><div class="bar-in">
+  <a class="logo" href="#">事后诸葛亮</a>
+  <button class="lockbtn" id="lockBtn" hidden>上锁</button>
+  <nav class="nav"><a href="#" data-nav="home">首页</a> <a href="#new" data-nav="new">新决定</a> <a href="#backup" data-nav="backup">设置</a></nav>
+</div></header>
+<main id="app"><p class="muted">载入中…</p></main>
+<div id="lock" hidden role="dialog" aria-modal="true" aria-label="输入密码">
+  <div class="lock-seal" aria-hidden="true">锁</div>
+  <div class="lk-ttl" id="lkTitle">输入密码</div>
+  <div class="dots" id="lkDots"></div>
+  <div class="msg" id="lkMsg"></div>
+  <div class="pad" id="lkPad">
+    <button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button>
+    <button data-n="4">4</button><button data-n="5">5</button><button data-n="6">6</button>
+    <button data-n="7">7</button><button data-n="8">8</button><button data-n="9">9</button>
+    <button class="fn" id="lkBio">Face ID</button><button data-n="0">0</button><button class="fn" data-n="B" aria-label="删除">⌫</button>
+  </div>
+  <div class="lk-foot"><button class="link small" id="lkForgot">忘记密码？</button><button class="btn small ghost" id="lkCancel" hidden>取消</button></div>
+  <p class="note" id="lkHelp" hidden>来跟 Claude 说“帮我重设事后诸葛亮的密码”，可以从后台清掉，决定资料一个字都不会少。</p>
+</div>
+<div id="cere" hidden aria-live="polite">
+  <div class="c-wash"></div>
+  <div class="c-stage">
+    <svg class="c-pouch" viewBox="0 0 180 220" aria-hidden="true">
+      <path class="body" d="M58 58 Q46 30 62 22 Q76 34 90 26 Q104 34 118 22 Q134 30 122 58 Z"/>
+      <path class="body" d="M60 70 Q22 112 30 168 Q38 206 90 210 Q142 206 150 168 Q158 112 120 70 Z"/>
+      <rect class="body" x="58" y="54" width="64" height="22" rx="9"/>
+      <path class="gold" d="M46 120 Q90 108 134 120 M40 150 Q90 138 140 150 M44 182 Q90 172 136 182" opacity=".55"/>
+      <path class="gold" d="M64 66 Q90 74 116 66" opacity=".6"/>
+      <path class="cord" d="M56 66 Q90 84 124 66 M90 74 Q78 96 70 112 M90 74 Q100 98 108 112"/>
+      <circle cx="90" cy="74" r="6" fill="var(--pouch-gold)"/>
+    </svg>
+    <div class="c-ring"></div>
+    <div class="c-stamp" id="cereS">封</div>
+  </div>
+  <div class="c-text"><b id="cereT"></b><span id="cereSub"></span></div>
+  <div class="c-skip">点一下继续</div>
+</div>
+<div id="ask" hidden role="alertdialog" aria-modal="true"><div class="ask-box"><p id="askMsg"></p><div class="actions"><button class="btn ghost" id="askNo">取消</button><button class="btn vermilion" id="askYes">确定</button></div></div></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- constants ---------- */
+const DIMS = {
+  importance:{name:"重要性",hint:"你有多在乎",scale:["无所谓","有点在乎","在乎","很在乎","非常在乎"]},
+  duration:{name:"持续多久",hint:"影响会拖多久",scale:["几天","几周","几个月","一两年","很多年"]},
+  probability:{name:"可能性",hint:"真的会发生的机会",scale:["不太会","有可能","一半一半","很可能","几乎一定"]},
+  scope:{name:"影响范围",hint:"影响生活多大一块",scale:["一小块","一部分","好几方面","大部分","整个生活"]}
+};
+const DIM_ORDER = ["importance","duration","probability","scope"];
+const MOODS = ["冷静","兴奋","焦虑","犹豫","疲惫","被逼的","赌一把","松了口气"];
+const REVERSIBLE = ["随时能回头","回头有点痛","回不了头"];
+const REVIEW_PLAN = [{key:"1m",label:"1 个月后",months:1},{key:"6m",label:"6 个月后",months:6},{key:"1y",label:"1 年后",months:12}];
+const ROOT_FOLDER_TITLE = "Wei Hang Apps 备份";
+const APP_FOLDER_TITLE = "事后诸葛亮";
+const LS_KEY = "shzgl:v1";
+const QUESTIONS = 10;
+
+/* ---------- state ---------- */
+const S = {
+  decisions:new Map(),
+  settings:{dims:["importance","duration"],lastBackup:null,gas:null},
+  mode:"loading", sync:"wait", email:"", uid:null,
+  sample:undefined, busy:{}, err:{}, drafts:{}, open:{}, restoreList:null, freshSeal:null, step:{}, lastView:"", viewKey:"", freshTrig:null
+};
+const pending = new Map(); // id -> {timer, inflight, dirty}
+
+/* ---------- utils ---------- */
+const $ = s => document.querySelector(s);
+const app = $("#app");
+const nowISO = () => new Date().toISOString();
+const uid = () => (crypto.randomUUID ? crypto.randomUUID().replace(/-/g,"") : (Date.now().toString(36)+Math.random().toString(36).slice(2))).slice(0,16);
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function fmt(iso){if(!iso)return"";const d=new Date(iso);return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`}
+function fmtShort(iso){if(!iso)return"";const d=new Date(iso);return `${d.getMonth()+1}月${d.getDate()}日`}
+function dateBlock(iso,cls){if(!iso)return `<span class="db none"><span class="m">日期</span><span class="d">未定</span></span>`;const d=new Date(iso.length===10?iso+"T00:00:00":iso);return `<span class="db ${cls||""}"><span class="m">${d.getMonth()+1}月</span><span class="d">${d.getDate()}</span></span>`}
+function renderSummary(t){const parts=String(t).split(/【([^】]+)】/);let h="";if(parts[0].trim())h+=`<div class="sum-sec"><p>${esc(parts[0].trim())}</p></div>`;for(let i=1;i<parts.length;i+=2){const title=parts[i];h+=`<div class="sum-sec${/看法/.test(title)?" verdict":""}"><h4>${esc(title)}</h4><p>${esc((parts[i+1]||"").trim())}</p></div>`}return `<div class="sum">${h}</div>`}
+function fmtDay(iso){if(!iso)return"";const d=new Date(iso.length===10?iso+"T00:00:00":iso);return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`}
+function daysUntil(dateStr){if(!dateStr)return null;const t=new Date(dateStr+"T00:00:00");const n=new Date();n.setHours(0,0,0,0);return Math.round((t-n)/86400000)}
+function addMonths(iso,m){const d=new Date(iso);d.setMonth(d.getMonth()+m);return d.toISOString()}
+function clone(o){return JSON.parse(JSON.stringify(o))}
+let toastT;
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,3200)}
+
+/* ---------- scoring ---------- */
+function itemScore(item,dims){
+  if(!dims.length)return null;
+  let p=1;for(const k of dims){const v=item.scores&&item.scores[k];if(!v)return null;p*=v}
+  return Math.round(p/Math.pow(5,dims.length)*100)/10; // 换算成 10 分制
+}
+function optionTotal(opt,dims){
+  let t=0,any=false;
+  for(const it of opt.items){if(it.mirrorOf)continue;const s=itemScore(it,dims);if(s==null)continue;any=true;t+=it.type==="pro"?s:-s}
+  return any?Math.round(t*10)/10:null;
+}
+
+/* ---------- persistence (Supabase, with an offline cache in this device) ---------- */
+const TABLE="decisions";
+const lsGet=(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let dirty=new Set(lsGet("shzgl:dirty",[]));
+let ver=new Map(Object.entries(lsGet("shzgl:ver",{})));
+const saveDirty=()=>lsSet("shzgl:dirty",[...dirty]);
+const saveVer=()=>lsSet("shzgl:ver",Object.fromEntries(ver));
+function lsLoad(){try{const raw=localStorage.getItem(LS_KEY);if(!raw)return;const o=JSON.parse(raw);(o.decisions||[]).forEach(d=>S.decisions.set(d.id,d));if(o.settings)Object.assign(S.settings,o.settings)}catch(e){}}
+function lsSave(){try{localStorage.setItem(LS_KEY,JSON.stringify({decisions:[...S.decisions.values()],settings:S.settings}))}catch(e){}}
+
+function persist(d,logText){
+  d.updatedAt=nowISO();
+  if(logText){(d.log=d.log||[]).push({at:d.updatedAt,text:logText})}
+  S.decisions.set(d.id,d);
+  queueSave(d.id);
+  render();
+}
+function persistSettings(){queueSave("_settings");}
+function queueSave(id){
+  lsSave();dirty.add(id);saveDirty();
+  if(S.mode!=="db")return;
+  let p=pending.get(id);if(!p){p={timer:null,inflight:false,dirty:false};pending.set(id,p)}
+  p.dirty=true;clearTimeout(p.timer);p.timer=setTimeout(()=>flush(id),450);
+}
+let syncWarned=false;
+async function flush(id){
+  const p=pending.get(id);if(!p||p.inflight)return;
+  p.dirty=false;p.inflight=true;
+  try{
+    const body=id==="_settings"?clone(S.settings):S.decisions.get(id)?clone(S.decisions.get(id)):null;
+    if(body){
+      const r=await SB.from(TABLE).upsert({user_id:S.uid,id,data:body}).select("updated_at").single();
+      if(r.error)throw r.error;
+      ver.set(id,r.data.updated_at);
+    }else{
+      const r=await SB.from(TABLE).delete().eq("id",id);
+      if(r.error)throw r.error;
+      ver.delete(id);
+    }
+    saveVer();
+    if(!p.dirty){dirty.delete(id);saveDirty()}
+    setSync("ok");syncWarned=false;
+  }catch(e){
+    setSync(navigator.onLine?"err":"offline");
+    if(!syncWarned&&navigator.onLine){syncWarned=true;toast("同步没成功，改动先存在这台设备，有网络会自动补上")}
+  }
+  p.inflight=false;
+  if(p.dirty)flush(id);else pending.delete(id);
+}
+function deleteDecision(id){S.decisions.delete(id);queueSave(id);}
+function pushDirty(){if(S.mode!=="db")return;for(const id of dirty){if(!pending.has(id)){pending.set(id,{timer:null,inflight:false,dirty:true});flush(id)}}}
+
+function setSync(st){if(S.sync===st)return;S.sync=st;const el=document.getElementById("syncLine");if(el)el.outerHTML=syncLine()}
+function applyRow(id,data){
+  if(!data)return;
+  if(id==="_settings"){Object.assign(S.settings,data);S.settings.lock=data.lock||null;return}
+  S.decisions.set(id,clone(data));
+}
+let pulling=null,pulledOnce=false;
+async function pull(){
+  const {data,error}=await SB.from(TABLE).select("id,data,updated_at");
+  if(error)throw error;
+  const seen=new Set();let changed=false;
+  for(const r of data){
+    seen.add(r.id);
+    if(dirty.has(r.id)||pending.has(r.id))continue;
+    const have=r.id==="_settings"||S.decisions.has(r.id);
+    if(have&&ver.get(r.id)===r.updated_at)continue;
+    ver.set(r.id,r.updated_at);applyRow(r.id,r.data);changed=true;
+  }
+  for(const id of [...S.decisions.keys()]){
+    if(seen.has(id)||dirty.has(id)||pending.has(id))continue;
+    if(ver.has(id)){S.decisions.delete(id);ver.delete(id);changed=true}
+    else{dirty.add(id)}
+  }
+  if(!seen.has("_settings")&&!ver.has("_settings"))dirty.add("_settings");
+  saveVer();saveDirty();
+  if(changed){lsSave();render()}
+  setSync("ok");
+  pushDirty();
+  if(!pulledOnce){pulledOnce=true;dailyBackup()}
+}
+const repull=()=>pulling||(pulling=pull().catch(e=>{
+  const m=String(e&&e.message||"");
+  setSync(/relation|does not exist|schema cache|not find the table/i.test(m)?"nosql":navigator.onLine?"err":"offline");
+}).finally(()=>{pulling=null}));
+function onRow(p){
+  if(p.eventType==="DELETE"){
+    const o=p.old||{};if(!o.id||(o.user_id&&o.user_id!==S.uid)||dirty.has(o.id)||pending.has(o.id))return;
+    if(S.decisions.delete(o.id)){ver.delete(o.id);saveVer();lsSave();render()}
+    return;
+  }
+  const n=p.new;if(!n||!n.id||n.user_id!==S.uid)return;
+  if(dirty.has(n.id)||pending.has(n.id)||ver.get(n.id)===n.updated_at)return;
+  ver.set(n.id,n.updated_at);saveVer();applyRow(n.id,n.data);lsSave();render();
+}
+
+/* ---------- Supabase connection & login ---------- */
+const DEFAULT_SB_URL="https://fjfcjimmubfcbtazwosw.supabase.co";
+const CFG=(()=>{const c=window.DM_CONFIG||{},l=lsGet("shzgl.cfg",null)||lsGet("sz.cfg",null)||{};return{url:String(c.url||l.url||"").trim().replace(/\/+$/,""),key:String(c.key||l.key||"").trim()}})();
+let SB=null;
+function sbClient(){
+  if(!SB&&CFG.url&&CFG.key&&window.supabase){
+    try{SB=window.supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:"sz-auth"}})}catch(e){SB=null}
+  }
+  return SB;
+}
+async function initStore(){
+  lsLoad();S.mode="cache";S.sync="wait";render();
+  if("serviceWorker" in navigator&&window.isSecureContext){try{navigator.serviceWorker.register("sw.js")}catch(e){}}
+  if(!window.supabase){setSync("offline");window.addEventListener("online",()=>location.reload(),{once:true});return}
+  if(!CFG.url||!CFG.key){setSync("login");showAuth("setup");return}
+  const sb=sbClient();if(!sb){setSync("err");return}
+  let session=null;
+  try{session=(await sb.auth.getSession()).data.session}catch(e){}
+  if(!session){
+    if(lsGet("shzgl:uid","")&&!navigator.onLine){setSync("offline");window.addEventListener("online",()=>location.reload(),{once:true});return}
+    setSync("login");showAuth("login");return;
+  }
+  startSync(session.user);
+}
+function startSync(user){
+  document.getElementById("auth").hidden=true;
+  const uid=user.id;S.email=user.email||"";
+  const prev=lsGet("shzgl:uid","");
+  if(prev&&prev!==uid){S.decisions.clear();dirty=new Set();ver=new Map();saveDirty();saveVer();lsSave()}
+  lsSet("shzgl:uid",uid);
+  S.uid=uid;S.mode="db";render();
+  try{
+    SB.channel("dm-"+uid)
+      .on("postgres_changes",{event:"INSERT",schema:"public",table:TABLE,filter:"user_id=eq."+uid},onRow)
+      .on("postgres_changes",{event:"UPDATE",schema:"public",table:TABLE,filter:"user_id=eq."+uid},onRow)
+      .on("postgres_changes",{event:"DELETE",schema:"public",table:TABLE},onRow)
+      .subscribe(st=>{if(st==="SUBSCRIBED")repull()});
+  }catch(e){}
+  repull();
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")repull()});
+  window.addEventListener("online",()=>{repull()});
+  setInterval(()=>{if(document.visibilityState==="visible")repull()},120000);
+}
+function showAuth(mode){
+  const A=document.getElementById("auth");A.hidden=false;
+  const $$=id=>document.getElementById(id);
+  const setup=mode==="setup";
+  $$("cfgFields").hidden=!setup;$$("loginFields").hidden=setup;
+  if(setup){$$("cfgUrl").value=CFG.url||DEFAULT_SB_URL;$$("cfgKey").value=CFG.key||""}
+  $$("authSub").textContent=setup?"先填 Supabase 的网址和 Publishable key（跟书斋用同一个）。每台设备只要填一次。":"用书斋那个电邮和密码登入，手机和 iPad 的决定会自动同步。";
+  $$("authSwitch").hidden=setup;
+  let signUp=false;
+  const paint=()=>{$$("authGo").textContent=setup?"保存":signUp?"注册":"登入";$$("authSwitch").textContent=signUp?"已经有账号？登入":"第一次用？注册账号";$$("authPass").autocomplete=signUp?"new-password":"current-password"};
+  paint();
+  const msg=(t,ok)=>{const m=$$("authMsg");m.textContent=t||"";m.classList.toggle("ok",!!ok)};
+  $$("authSwitch").onclick=()=>{signUp=!signUp;msg("");paint()};
+  $$("authForm").onsubmit=async e=>{
+    e.preventDefault();
+    if(setup){
+      const url=$$("cfgUrl").value.trim().replace(/\/+$/,""),key=$$("cfgKey").value.trim();
+      if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)||key.length<20){msg("网址要像 https://xxxx.supabase.co，key 是一长串字");return}
+      if(/^sb_secret_/i.test(key)){msg("这个是 secret key，千万不能放进网页。要用 Publishable key");return}
+      lsSet("shzgl.cfg",{url,key});location.reload();return;
+    }
+    const email=$$("authEmail").value.trim(),password=$$("authPass").value;
+    if(!email||password.length<6){msg("填电邮，密码至少 6 个字");return}
+    $$("authGo").disabled=true;msg(signUp?"正在注册…":"正在登入…",true);
+    try{
+      const r=signUp?await SB.auth.signUp({email,password}):await SB.auth.signInWithPassword({email,password});
+      if(r.error)throw r.error;
+      if(!r.data.session){msg("注册好了。去电邮按确认链接，再回来登入。",true);signUp=false;paint();return}
+      startSync(r.data.session.user);
+    }catch(err){
+      const t=String(err&&err.message||"");
+      msg(/Invalid login/i.test(t)?"电邮或密码不对":/not confirmed/i.test(t)?"电邮还没确认，去邮箱按确认链接":/already registered/i.test(t)?"这个电邮注册过了，直接登入":/Password should/i.test(t)?"密码至少 6 个字":/fetch|network/i.test(t)?"连不上网络":"没成功："+t);
+    }finally{$$("authGo").disabled=false}
+  };
+}
+async function signOut(){
+  if(dirty.size&&!await ask("还有改动没同步上去，现在登出会丢掉这些改动。确定登出？"))return;
+  if(!dirty.size&&!await ask("登出这台设备？"))return;
+  try{await SB.auth.signOut()}catch(e){}
+  ["shzgl:v1","shzgl:dirty","shzgl:ver","shzgl:uid"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+  location.reload();
+}
+
+/* ---------- capabilities ---------- */
+async function getSample(){S.sample=null;return null}
+
+/* ---------- routing ---------- */
+function route(){const h=location.hash.slice(1);if(h==="new")return{v:"new"};if(h==="backup")return{v:"backup"};if(h.startsWith("d-"))return{v:"d",id:h.slice(2)};return{v:"home"}}
+
+/* ---------- render ---------- */
+let needRender=false;
+function render(){
+  const ae=document.activeElement;
+  if(ae&&app.contains(ae)&&(ae.tagName==="INPUT"&&(ae.type==="text"||ae.type==="password")||ae.tagName==="TEXTAREA")){needRender=true;return}
+  needRender=false;
+  const r=route();
+  document.querySelectorAll("[data-nav]").forEach(a=>a.setAttribute("aria-current",a.dataset.nav===r.v?"page":"false"));
+  if(S.mode==="loading"){app.innerHTML='<p class="muted">载入中…</p>';return}
+  const hasLock=!!(S.settings.lock&&S.settings.lock.hash);
+  document.body.classList.toggle("locked",isLocked());
+  const lb=document.getElementById("lockBtn");if(lb)lb.hidden=!hasLock||isLocked();
+  if(isLocked()){if(document.getElementById("lock").hidden||lkMode!=="unlock")showLock("unlock");app.innerHTML="";return}
+  let html="";S.viewKey=r.v;
+  if(r.v==="new")html=viewNew();
+  else if(r.v==="backup")html=viewBackup();
+  else if(r.v==="d"){const d=S.decisions.get(r.id);html=d?viewDecision(d):`<div class="empty"><p>找不到这个决定，可能已经删掉了。</p><a class="btn ghost" href="#">回首页</a></div>`}
+  else html=viewHome();
+  app.innerHTML=html;
+  app.querySelectorAll("textarea").forEach(autosize);
+  if(S.freshSeal)S.freshSeal=null;
+  S.freshTrig=null;
+  if(S.viewKey!==S.lastView){const first=!S.lastView;S.lastView=S.viewKey;app.classList.remove("enter");void app.offsetWidth;app.classList.add("enter");clearTimeout(S.enterT);S.enterT=setTimeout(()=>app.classList.remove("enter"),1100);if(!first)window.scrollTo({top:0})}
+}
+app.addEventListener("focusout",()=>{setTimeout(()=>{if(needRender)render()},0)});
+
+function syncLine(){
+  const st=S.sync;
+  const t={ok:["ok","已同步：手机和 iPad 看到同一份"],wait:["wait","正在同步…"],offline:["wait","没网络，改动先存在这台设备"],err:["err","同步出了问题，改动先存在这台设备"],nosql:["err","Supabase 还没建表：去 SQL Editor 跑一次 setup.sql"],login:["err","还没登入"]}[st]||["wait","正在同步…"];
+  return `<span class="sync" id="syncLine"><i class="syncdot ${t[0]}"></i>${t[1]}${dirty.size&&st!=="ok"?`（${dirty.size} 项待同步）`:""}</span>`;
+}
+
+/* HOME */
+function viewHome(){
+  const all=[...S.decisions.values()];
+  const ruled=all.filter(d=>d.status==="ruled").sort((a,b)=>(a.final.rule.checkBy||"9999").localeCompare(b.final.rule.checkBy||"9999"));
+  const thinking=all.filter(d=>!isSealed(d)).sort((a,b)=>(a.decideBy||"9999").localeCompare(b.decideBy||"9999"));
+  const decided=all.filter(d=>d.status==="decided").sort((a,b)=>b.final.decidedAt.localeCompare(a.final.decidedAt));
+  const now=nowISO();
+  const due=decided.filter(d=>(d.reviews||[]).some(r=>!r.done&&r.due<=now));
+  let h=`${S.sync==="nosql"?`<p class="banner">Supabase 还没建表。去 Supabase 的 SQL Editor，把 setup.sql 整段贴上按 Run，再回来刷新。</p>`:""}<section class="hero"><div class="hero-v" aria-hidden="true">运筹帷幄之中</div><svg class="fan" viewBox="0 0 220 260" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"><path d="M84.4 178.6Q28.5 139.5 -38.0 124.1Q17.9 163.2 84.4 178.6M84.4 178.6L-38.0 124.1M87.1 173.9Q44.6 128.3 -12.9 104.0Q29.6 149.6 87.1 173.9M87.1 173.9L-12.9 104.0M90.5 169.9Q53.4 112.6 -2.5 73.5Q34.7 130.7 90.5 169.9M90.5 169.9L-2.5 73.5M94.8 166.5Q72.4 108.3 28.3 64.2Q50.6 122.4 94.8 166.5M94.8 166.5L28.3 64.2M99.5 164.0Q86.5 97.0 49.3 39.8Q62.4 106.8 99.5 164.0M99.5 164.0L49.3 39.8M104.7 162.5Q105.8 100.2 81.4 42.8Q80.3 105.1 104.7 162.5M104.7 162.5L81.4 42.8M110.0 162.0Q123.0 95.0 110.0 28.0Q97.0 95.0 110.0 162.0M110.0 162.0L110.0 28.0M115.3 162.5Q139.7 105.1 138.6 42.8Q114.2 100.2 115.3 162.5M115.3 162.5L138.6 42.8M120.5 164.0Q157.6 106.8 170.7 39.8Q133.5 97.0 120.5 164.0M120.5 164.0L170.7 39.8M125.2 166.5Q169.4 122.4 191.7 64.2Q147.6 108.3 125.2 166.5M125.2 166.5L191.7 64.2M129.5 169.9Q185.3 130.7 222.5 73.5Q166.6 112.6 129.5 169.9M129.5 169.9L222.5 73.5M132.9 173.9Q190.4 149.6 232.9 104.0Q175.4 128.3 132.9 173.9M132.9 173.9L232.9 104.0M135.6 178.6Q202.1 163.2 258.0 124.1Q191.5 139.5 135.6 178.6M135.6 178.6L258.0 124.1"/><path d="M96 184Q110 168 124 184"/><rect x="104" y="186" width="12" height="62" rx="6"/><path d="M110 248l0 10m-6 4l6 -4l6 4"/></g></svg><h1>事后诸葛亮</h1><p>先把当时的想法封进锦囊。以后想骂自己蠢，先打开看看当时的你知道什么。</p><div class="actions"><a class="btn" href="#new">记一个新决定</a>${syncLine()}</div></section>`;
+  if(due.length){h+=`<section class="group"><h2>该复盘了</h2>${due.map(d=>{const r=d.reviews.find(r=>!r.done&&r.due<=now);return `<a class="entry" href="#d-${d.id}">${dateBlock(r.due,"sealed")}<div class="eb"><h3>${esc(d.title)}</h3><div class="meta"><span class="due">${esc(r.label)}的复盘到了</span><span>封存于 ${fmtDay(d.final.decidedAt)}</span></div></div></a>`}).join("")}</section>`}
+  if(ruled.length){h+=`<section class="group"><h2>等条件触发</h2>${ruled.map(d=>{const st=condState(d);const msg=st.trig?`<span class="due">条件达到了：选${esc(st.trig.o.name)}，去确认</span>`:st.overdue?`<span class="due">过了检查日期，该走默认选项了</span>`:st.dueToday?`<span class="due">今天要检查</span>`:`还有 ${st.daysLeft} 天检查`;return `<a class="entry" href="#d-${d.id}">${dateBlock(d.final.rule.checkBy)}<div class="eb"><h3>${esc(d.title)}</h3><div class="meta"><span>${msg}</span><span>${st.res.map(r=>`${esc(r.o.name)} ${r.done}/${r.total}`).join("，")}</span></div></div></a>`}).join("")}</section>`}
+  h+=`<section class="group"><h2>考虑中</h2>`;
+  if(!thinking.length)h+=`<p class="empty">没有在纠结的事。难得。</p>`;
+  else h+=thinking.map(d=>{const n=daysUntil(d.decideBy);const when=n==null?"没定日期":n<0?`<span class="due">过期 ${-n} 天了</span>`:n===0?`<span class="due">就是今天</span>`:`还有 ${n} 天`;const stepDone=[true,d.options.some(o=>o.items.length),!!(d.interview&&(d.interview.summary||d.interview.skipped))].filter(Boolean).length;return `<a class="entry" href="#d-${d.id}">${dateBlock(d.decideBy)}<div class="eb"><h3>${esc(d.title)}</h3><div class="meta"><span>${d.decideBy?fmtDay(d.decideBy)+"决定，":""}${when}</span><span>${d.options.length} 个选项</span><span>做到第 ${stepDone} 步</span></div></div></a>`}).join("");
+  h+=`</section>`;
+  h+=`<section class="group"><h2>已封存的锦囊</h2>`;
+  if(!decided.length)h+=`<p class="empty">还没封过任何锦囊。</p>`;
+  else h+=decided.map(d=>{const opt=d.options.find(o=>o.id===d.final.optionId);const next=(d.reviews||[]).find(r=>!r.done);return `<a class="entry" href="#d-${d.id}">${dateBlock((d.outcome&&d.outcome.at)||d.final.decidedAt,"sealed")}<div class="eb"><h3>${esc(d.title)}</h3><div class="meta"><span>选了：${esc(opt?opt.name:"?")}</span><span>封存于 ${fmtDay(d.final.decidedAt)}</span>${next?`<span>下次复盘 ${fmtDay(next.due)}</span>`:"<span>复盘完了</span>"}</div></div></a>`}).join("");
+  h+=`</section>`;
+  return h;
+}
+
+/* NEW */
+function viewNew(){
+  const dr=S.drafts.new||(S.drafts.new={title:"",context:"",decideBy:"",options:["",""],dims:[...S.settings.dims]});
+  return `<div class="dhead"><h1>记一个新决定</h1><p class="muted small">建档时间会自动记下。考虑期间什么都能改，封存之后就不能了。</p></div>
+  <label class="f" for="n-title">标题</label>
+  <input type="text" id="n-title" data-nd="title" value="${esc(dr.title)}" placeholder="例如：要不要回新加坡工作">
+  <label class="f" for="n-ctx">情境说明</label>
+  <textarea id="n-ctx" data-nd="context" placeholder="现在是什么状况？为什么要做这个决定？">${esc(dr.context)}</textarea>
+  <label class="f">选项</label>
+  ${dr.options.map((o,i)=>`<div class="row" style="margin-bottom:8px"><input type="text" data-nopt="${i}" value="${esc(o)}" placeholder="选项 ${String.fromCharCode(65+i)}">${dr.options.length>2?`<button class="x" data-act="n-delopt" data-i="${i}" aria-label="删除这个选项">×</button>`:""}</div>`).join("")}
+  <button class="link" data-act="n-addopt">加一个选项</button>
+  <label class="f" for="n-date">决定会发生的日期</label>
+  <input type="date" id="n-date" data-nd="decideBy" value="${esc(dr.decideBy)}">
+  <label class="f">好处坏处用哪些维度打分</label>
+  ${dimChips(dr.dims,"n-dim")}
+  <div class="actions"><button class="btn" data-act="n-create">建档</button><a class="btn ghost" href="#">取消</a></div>`;
+}
+function dimChips(sel,act,disabled){
+  return `<div class="chips">${DIM_ORDER.map(k=>`<button class="chip" data-act="${act}" data-k="${k}" aria-pressed="${sel.includes(k)}" ${disabled?"disabled":""}>${DIMS[k].name}<small>${DIMS[k].hint}</small></button>`).join("")}</div><p class="muted small" style="margin:6px 0 0">每个维度 1–5 分，相乘后换算成 10 分制（例如 5×2=10，满分 25，换算后是 4 分）。好处算正，坏处算负。</p>`;
+}
+
+/* DECISION */
+const CIRC="①②③④⑤⑥⑦⑧⑨⑩⑪⑫";
+function isSealed(d){return d.status==="decided"||d.status==="ruled"}
+function condState(d){
+  const rule=d.final&&d.final.rule;if(!rule)return null;
+  const checks=d.checks||{};
+  const res=d.options.map(o=>{const c=rule.conds[o.id];if(!c||!c.items.length)return null;
+    const ticks=c.items.map(it=>checks[it.id]).filter(Boolean).sort();
+    const done=ticks.length;const met=c.rule==="any"?done>0:done===c.items.length;
+    return{o,c,met,metAt:met?(c.rule==="any"?ticks[0]:ticks[ticks.length-1]):null,done,total:c.items.length}}).filter(Boolean);
+  const trig=res.filter(r=>r.met).sort((a,b)=>a.metAt.localeCompare(b.metAt))[0]||null;
+  const n=daysUntil(rule.checkBy);
+  return{res,trig,overdue:n!=null&&n<0,dueToday:n===0,daysLeft:n};
+}
+function flushCondAdds(d,dr){if(!dr||!dr.conds)return;for(const o of d.options){const ak=`cadd-${d.id}-${o.id}`;const v=(S.drafts[ak]||"").trim();if(!v)continue;(dr.conds[o.id]=dr.conds[o.id]||{rule:"all",items:[]}).items.push({id:uid(),text:v});S.drafts[ak]=""}}
+function condListHTML(d,v){let h="";for(const o of d.options){const c=v.conds&&v.conds[o.id];if(!c||!c.items.length)continue;h+=`<dt>选「${esc(o.name)}」的条件（${c.rule==="all"?"全部达到":"任何一个"}）</dt><dd>${c.items.map((it,i)=>(CIRC[i]||i+1)+" "+esc(it.text)).join("<br>")}</dd>`}return h+`<dt>最晚检查日期</dt><dd>${v.checkBy?fmtDay(v.checkBy):"—"}</dd>`}
+function condSummary(d,conds,defaultOpt){
+  const parts=d.options.filter(o=>conds&&conds[o.id]&&conds[o.id].items.length).map(o=>`${o.name} ${conds[o.id].items.length} 条`);
+  const def=d.options.find(o=>o.id===defaultOpt);
+  return `条件式：${parts.join("、")||"还没写条件"}${def?`，默认${def.name}`:""}`;
+}
+function readStep1(d){return `<p class="context">${d.context?esc(d.context):'<span class="muted">没写情境</span>'}</p><div class="optpills">${d.options.map(o=>`<span class="optpill">${esc(o.name)}</span>`).join("")}</div>`}
+function defaultStep(d){
+  if(d.status==="decided")return 5;
+  if(isSealed(d))return 4;
+  if(!d.options.some(o=>o.items.length))return 2;
+  const iv=d.interview||{};
+  if(!(iv.summary||iv.skipped))return 3;
+  return 4;
+}
+const NUMS="壹贰叁肆伍";
+const STEP_T=["建档","好处和坏处","Claude 拷问","最终决定","复盘"];
+function viewDecision(d){
+  const locked=isSealed(d);const decided=d.status==="decided";
+  const iv=d.interview||{};
+  const prosUpdated=d.options.flatMap(o=>o.items.map(i=>i.updatedAt||i.createdAt)).sort().pop();
+  const reviewsDone=(d.reviews||[]).filter(r=>r.done);
+  let cur=S.step[d.id]||defaultStep(d);if(cur===5&&!decided)cur=4;
+  S.viewKey="d"+d.id+":"+cur;
+  const nDrafts=(d.finalDrafts||[]).length;
+  const dueRv=decided&&(d.reviews||[]).some(r=>!r.done&&r.due<=nowISO());
+  const steps=[
+    {t:"建档",at:d.createdAt},
+    {t:"好坏",at:prosUpdated},
+    {t:"拷问",at:iv.summaryAt||iv.skippedAt,txt:iv.skipped?"跳过":null},
+    {t:"决定",at:locked?d.final.decidedAt:null,txt:!locked&&nDrafts?`${nDrafts} 版草稿`:d.status==="ruled"?"等触发":null},
+    {t:"复盘",at:reviewsDone.length?reviewsDone[reviewsDone.length-1].done.at:null,txt:dueRv?"到期了":reviewsDone.length?`${reviewsDone.length} 次`:null,dis:!decided}
+  ];
+  const n=daysUntil(d.decideBy);
+  const log=(d.log||[]).slice().reverse();
+  let h=`<a class="back" href="#">‹ 全部决定</a>
+  <div class="dhead"><div class="dh-main"><span class="status${locked?" sealed":""}">${decided?"已封存":locked?"规则已封存，等条件触发":"考虑中"}</span>
+    <h1>${esc(d.title)}</h1>
+    <p class="muted small" style="margin:6px 0 0">决定日期：${d.decideBy?fmtDay(d.decideBy):"没定"}${!locked&&n!=null?(n<0?`，<span class="due">过期 ${-n} 天</span>`:n===0?'，<span class="due">就是今天</span>':`，还有 ${n} 天`):""}</p></div>
+    <div class="dtools"><button class="btn ghost small" data-act="toggle" data-key="log-${d.id}">记录 ${log.length}</button></div></div>`;
+  if(S.open["log-"+d.id])h+=`<div class="logpanel"><b>修改记录</b><ul>${log.map(l=>`<li>${fmt(l.at)}：${esc(l.text)}</li>`).join("")}</ul><div class="actions"><button class="btn danger small" data-act="deldec">删除整个决定</button></div></div>`;
+  h+=`<nav class="steptabs" aria-label="步骤"><div class="st-in">${steps.map((s,i)=>`<button class="st${s.at?" done":""}${cur===i+1?" cur":""}" data-act="step" data-n="${i+1}" ${s.dis?"disabled":""} ${cur===i+1?'aria-current="step"':""}><span class="st-n">${NUMS[i]}</span><span class="st-t">${s.t}</span><span class="st-d${s.txt==="到期了"?" due":""}">${s.txt?esc(s.txt):s.at?fmtShort(s.at):s.dis?"封存后":"—"}</span></button>`).join("")}</div></nav>`;
+  const head=(k,extra)=>`<div class="step-h"><span class="n" aria-hidden="true">${NUMS[k-1]}</span><div class="sh"><h2>${STEP_T[k-1]}</h2>${extra||""}</div></div>`;
+  h+=`<section class="step">`;
+  if(cur===1){
+    h+=head(1,`<span class="stamp-date">${fmt(d.createdAt)}</span>`);
+    if(locked){
+      h+=readStep1(d);
+    }else if(!S.open["edit-"+d.id]){
+      h+=readStep1(d)+`<div class="actions"><button class="btn ghost small" data-act="toggle" data-key="edit-${d.id}">修改建档</button></div>`;
+    }else{
+      h+=`<label class="f" for="e-title">标题</label><input type="text" id="e-title" data-ed="title" value="${esc(d.title)}">
+      <label class="f" for="e-ctx">情境说明</label><textarea id="e-ctx" data-ed="context">${esc(d.context)}</textarea>
+      <label class="f" for="e-date">决定会发生的日期</label><input type="date" id="e-date" data-ed="decideBy" value="${esc(d.decideBy||"")}">
+      <label class="f">选项</label>
+      ${d.options.map(o=>`<div class="row" style="margin-bottom:8px"><input type="text" data-optname="${o.id}" value="${esc(o.name)}"><span class="stamp-date">加于 ${fmtDay(o.createdAt)}</span>${d.options.length>2?`<button class="x" data-act="delopt" data-o="${o.id}" aria-label="删除选项 ${esc(o.name)}">×</button>`:""}</div>`).join("")}
+      <div class="add"><input type="text" data-draft="newopt-${d.id}" value="${esc(S.drafts["newopt-"+d.id]||"")}" placeholder="还有别的选项？"><button class="btn small ghost" data-act="addopt">加选项</button></div><div class="actions"><button class="btn small" data-act="toggle" data-key="edit-${d.id}">改好了</button></div>`;
+    }
+  }else if(cur===2){
+    h+=head(2,prosUpdated?`<span class="stamp-date">最后改动 ${fmt(prosUpdated)}</span>`:"");
+    if(!locked){h+=`<details ${S.open["dims-"+d.id]?"open":""} data-tog="dims-${d.id}"><summary class="small muted" style="cursor:pointer">打分维度：${d.dims.map(k=>DIMS[k].name).join(" × ")||"没选"}（点开修改）</summary><div style="margin-top:10px">${dimChips(d.dims,"dim")}</div></details>`}
+    else h+=`<p class="small muted">打分维度：${d.dims.map(k=>DIMS[k].name).join(" × ")}</p>`;
+    h+=`<div style="margin-top:16px">`;
+    for(const o of d.options){
+      const tot=optionTotal(o,d.dims);
+      h+=`<div class="option ${tot>0?"pos":tot<0?"neg":""}"><div class="option-h"><h3>${esc(o.name)}</h3><span class="total ${tot>0?"pos":tot<0?"neg":""}">${tot==null?"未打分":(tot>0?"+":"")+tot}</span></div><div class="cols">`;
+      for(const type of ["pro","con"]){
+        const items=o.items.filter(i=>i.type===type);
+        h+=`<div class="side ${type}"><h4>${type==="pro"?"好处":"坏处"}</h4>`;
+        h+=items.map(it=>itemHTML(d,o,it,locked)).join("")||`<p class="small muted" style="margin:0 0 6px">还没写</p>`;
+        if(!locked)h+=`<div class="add"><input type="text" data-draft="add-${o.id}-${type}" value="${esc(S.drafts[`add-${o.id}-${type}`]||"")}" placeholder="加一个${type==="pro"?"好处":"坏处"}" data-enter="additem" data-o="${o.id}" data-type="${type}"><button class="btn small ghost" data-act="additem" data-o="${o.id}" data-type="${type}">加</button></div>`;
+        h+=`</div>`;
+      }
+      h+=`</div></div>`;
+    }
+    const totals=d.options.map(o=>({o,t:optionTotal(o,d.dims)}));
+    if(totals.some(x=>x.t!=null)){
+      const mx=Math.max(1,...totals.map(x=>Math.abs(x.t||0)));
+      h+=`<div class="compare"><p class="small muted" style="margin:0 0 6px">总分对比（参考用，不是判决）</p>${totals.map(({o,t})=>{const w=t==null?0:Math.abs(t)/mx*50;return `<div class="cmp"><span>${esc(o.name)}</span><div class="track"><div class="fill ${t>=0?"pos":"neg"}" style="${t>=0?`left:50%;width:${w}%`:`left:${50-w}%;width:${w}%`}"></div></div><span class="total ${t>0?"pos":t<0?"neg":""}" style="font-size:20px;text-align:right">${t==null?"–":(t>0?"+":"")+t}</span></div>`}).join("")}</div>`;
+    }
+    h+=factorTable(d);
+    h+=`</div>`;
+  }else if(cur===3){
+    h+=head(3,iv.startedAt?`<span class="stamp-date">开始于 ${fmt(iv.startedAt)}</span>`:"")+viewInterview(d,locked);
+  }else if(cur===4){
+    h+=head(4,locked?`<span class="stamp-date">封存于 ${fmt(d.final.decidedAt)}</span>`:(nDrafts?`<span class="stamp-date">最后保存 ${fmt(d.finalDrafts[nDrafts-1].at)}</span>`:""))+(locked?viewSealed(d):viewSealForm(d));
+  }else{
+    h+=head(5)+viewReviews(d);
+  }
+  h+=`</section>`;
+  const max=decided?5:4;
+  h+=`<div class="stepnav">${cur>1?`<button class="btn ghost small" data-act="step" data-n="${cur-1}">‹ ${STEP_T[cur-2]}</button>`:'<span class="sp"></span>'}${cur<max?`<button class="btn small" data-act="step" data-n="${cur+1}">${STEP_T[cur]} ›</button>`:""}</div>`;
+  return h;
+}
+
+function findItem(d,ref){if(!ref)return null;const o=d.options.find(o=>o.id===ref.o);const it=o&&o.items.find(i=>i.id===ref.it);return it?{o,it}:null}
+function mirrorsOf(d,it){const out=[];for(const o of d.options)for(const m of o.items)if(m.mirrorOf&&m.mirrorOf.it===it.id)out.push({o,m});return out}
+function itemHTML(d,o,it,locked){
+  const src=findItem(d,it.mirrorOf);
+  const s=itemScore(src?src.it:it,d.dims);
+  const key="it-"+it.id;
+  const open=S.open[key]!==undefined?S.open[key]:(!locked&&!src&&s==null);
+  let h=`<div class="item${src?" mirror":""}"><div class="item-top">`;
+  h+=locked?`<span class="item-text">${esc(it.text)}</span>`:`<textarea class="item-ta" rows="1" data-itemtext="${it.id}" data-o="${o.id}" aria-label="内容">${esc(it.text)}</textarea>`;
+  h+=src?`<span class="badge ghost" title="分数算在另一边">关联</span>`:`<span class="badge${s==null?" none":""}">${s==null?"?":s}</span>`;
+  h+=`</div><div class="item-sub">`;
+  if(src)h+=`<span>和「${esc(src.o.name)}」的“${esc(src.it.text)}”是同一件事，分数算在那边</span>`;
+  else if(s!=null)h+=`<span>${d.dims.map(k=>DIMS[k].scale[it.scores[k]-1]).join(" × ")}</span><span class="formula">${d.dims.map(k=>it.scores[k]).join(" × ")} = ${d.dims.reduce((p,k)=>p*it.scores[k],1)}/${Math.pow(5,d.dims.length)}，换算 ${s}/10</span>`;
+  else h+=`<span>${locked?"没打分":"还没打分"}</span>`;
+  h+=`<button class="more" data-act="itoggle" data-key="${key}" data-open="${open}" aria-expanded="${open}">${open?"收起":(locked?"详情":src?"更多":s==null?"打分":"改分")}</button></div>`;
+  if(open){
+    h+=`<div class="item-more">`;
+    if(src){
+      if(!locked)h+=`<button class="link small" data-act="unlink" data-o="${o.id}" data-it="${it.id}">取消关联，改回自己计分</button>`;
+    }else{
+      if(!locked)for(const k of d.dims){
+        const v=it.scores&&it.scores[k];
+        h+=`<div class="dim"><span class="dn">${DIMS[k].name}</span><span class="pips">${[1,2,3,4,5].map(n=>`<button class="pip" data-act="score" data-o="${o.id}" data-it="${it.id}" data-k="${k}" data-v="${n}" aria-pressed="${v===n}" title="${DIMS[k].scale[n-1]}">${n}</button>`).join("")}</span><span class="sv">${v?DIMS[k].scale[v-1]:""}</span></div>`;
+      }
+      const ms=mirrorsOf(d,it);
+      if(ms.length)h+=`<div class="mirror-note">同一件事也记在：${ms.map(x=>`「${esc(x.o.name)}」的“${esc(x.m.text)}”`).join("、")}</div>`;
+      if(!locked&&d.options.length>1){
+        const lk="lk-"+it.id;
+        if(S.open[lk]){
+          const cands=[];for(const x of d.options){if(x.id===o.id)continue;for(const c of x.items){if(c.mirrorOf||mirrorsOf(d,c).length)continue;cands.push({x,c})}}
+          cands.sort((a,b)=>(a.c.type===it.type)-(b.c.type===it.type));
+          h+=`<div class="linkto"><span class="muted">和哪一条是同一件事？</span>${cands.length?cands.map(({x,c})=>`<button class="chip" data-act="link-make" data-o="${o.id}" data-it="${it.id}" data-to="${x.id}" data-to-it="${c.id}">${esc(x.name)}的${c.type==="pro"?"好处":"坏处"}：${esc(c.text)}</button>`).join(""):`<span class="muted">其他选项还没有能关联的条目，先去那边写一条，再回来关联。</span>`}<button class="link small" data-act="toggle" data-key="${lk}">取消</button></div>`;
+        }else h+=`<div style="margin-top:8px"><button class="link small" data-act="toggle" data-key="${lk}">和其他选项的某一条是同一件事？</button></div>`;
+      }
+    }
+    h+=`<div class="item-foot"><span class="stamp-date">加于 ${fmt(it.createdAt)}${it.updatedAt&&it.updatedAt!==it.createdAt?`，改于 ${fmt(it.updatedAt)}`:""}</span>${locked?"":`<button class="x-del" data-act="delitem" data-o="${o.id}" data-it="${it.id}">删除这条</button>`}</div></div>`;
+  }
+  return h+`</div>`;
+}
+function factorTable(d){
+  const rows=[];
+  for(const o of d.options)for(const it of o.items){if(it.mirrorOf&&findItem(d,it.mirrorOf))continue;const ms=mirrorsOf(d,it);if(ms.length)rows.push({o,it,ms})}
+  if(!rows.length)return"";
+  let h=`<div class="fwrap"><p class="small muted" style="margin:0 0 4px">同一件事，放在一起看</p><table class="factors"><thead><tr><th>这件事</th>${d.options.map(o=>`<th>${esc(o.name)}</th>`).join("")}</tr></thead><tbody>`;
+  for(const r of rows){
+    const s=itemScore(r.it,d.dims);
+    h+=`<tr><td>${esc(r.it.text)}${s!=null?`<div class="stamp-date">${s} 分</div>`:""}</td>${d.options.map(o=>{
+      if(o.id===r.o.id)return `<td class="${r.it.type==="pro"?"cell-pro":"cell-con"}">${r.it.type==="pro"?"好处":"坏处"}${s!=null?`（${r.it.type==="pro"?"+":"−"}${s}）`:""}</td>`;
+      const m=r.ms.find(x=>x.o.id===o.id);
+      if(m)return `<td class="${m.m.type==="pro"?"cell-pro":"cell-con"}">${m.m.type==="pro"?"好处":"坏处"}<div class="stamp-date">${esc(m.m.text)}</div></td>`;
+      return `<td class="muted">–</td>`;
+    }).join("")}</tr>`;
+  }
+  return h+`</tbody></table></div>`;
+}
+
+function manualIvBox(d,again){
+  const k="paste-"+d.id;
+  return `<div class="sealbox manualiv"><p class="small" style="margin:12px 0 0">${again?"再拷问一次，新的整理会排在最上面，旧的收起来。":"Claude 拷问要在 Claude app 里做："}</p>
+  <ol><li>按「复制拷问指令」，里面已经带上你的标题、情境和好处坏处。</li><li>打开 Claude app 开一个新对话，贴上送出，它会一题一题问你。</li><li>问完它会给一份四段的思路整理，整段复制，贴到下面。</li></ol>
+  <div class="actions"><button class="btn" data-act="iv-copy">复制拷问指令</button></div>
+  <label class="f" for="paste-${d.id}">贴上 Claude 的思路整理</label><textarea id="paste-${d.id}" data-draft="${k}" placeholder="【你真正在乎的】……">${esc(S.drafts[k]||"")}</textarea>
+  <div class="actions"><button class="btn vermilion" data-act="iv-paste">保存整理</button>${again?`<button class="link small" data-act="toggle" data-key="mre-${d.id}">取消</button>`:`<button class="btn ghost" data-act="iv-skip">跳过这步</button>`}</div></div>`;
+}
+function ivPrompt(d){
+  return `你是我的决定顾问，说话可以毒舌调侃，但问题要尖锐、具体、对我有用。下面是我正在纠结的一个决定。
+
+请一题一题问我 ${QUESTIONS} 个问题：每次只问一题，等我回答完再问下一题，优先根据我上一题的回答追问，戳我回避或说不清的地方。可以考虑：真正的动机、最坏情况能不能承受、机会成本、能不能回头、10 分钟/10 个月/10 年后怎么看、是恐惧还是理性在做决定、有没有漏掉的选项、我的打分哪里可疑。
+
+问完 ${QUESTIONS} 题（或者我说"够了"）之后，输出一份思路整理，用纯文字，不要 markdown 符号，分四段，每段用【】标题开头并换行：
+【你真正在乎的】
+【每个选项的关键取舍】
+【你的回答里透露的担心或矛盾】
+【我的看法】（直说你倾向哪个选项、为什么、成立的前提或要先确认的事，最后一句提醒决定还是我自己做）
+总共 450 字以内。
+
+${brief(d)}
+现在开始问第 1 题。`;
+}
+async function copyText(t){
+  try{await navigator.clipboard.writeText(t);return true}catch(e){}
+  try{const ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();const ok=document.execCommand("copy");ta.remove();return ok}catch(e){return false}
+}
+function viewInterview(d,locked){
+  const iv=d.interview||{};
+  const qa=iv.qa||[];
+  const busy=S.busy["iv-"+d.id];
+  const err=S.err["iv-"+d.id];
+  let h=`<p class="muted small" style="margin-top:0">在 Claude app 里让 Claude 根据你的标题、情境和好处坏处一题一题拷问你，再把它的思路整理贴回来。不想做可以跳过。</p>`;
+
+  const answered=qa.filter(x=>x.a!=null||x.skipped);
+  if(answered.length){
+    const open=S.open["qa-"+d.id];
+    h+=`<button class="link" data-act="toggle" data-key="qa-${d.id}">${open?"收起":"看"}我的回答（${answered.length} 题）</button>`;
+    if(open)h+=answered.map((x,i)=>`<div class="qa"><div class="q">${i+1}. ${esc(x.q)}</div><div class="a">${x.skipped?'<span class="muted">（跳过）</span>':esc(x.a)}</div><div class="stamp-date">${fmt(x.aAt||x.qAt)}</div></div>`).join("");
+  }
+  if(iv.summary){
+    const rounds=iv.rounds&&iv.rounds.length?iv.rounds:[{summary:iv.summary,at:iv.summaryAt,open:[]}];
+    const last=rounds[rounds.length-1];
+    if(rounds.length>1){
+      const ok="rounds-"+d.id;
+      h+=`<div><button class="link small" data-act="toggle" data-key="${ok}">${S.open[ok]?"收起":"看"}之前的整理（${rounds.length-1} 次）</button></div>`;
+      if(S.open[ok])h+=rounds.slice(0,-1).map((r,i)=>`<div class="qa"><div class="stamp-date">第 ${i+1} 次整理，${fmt(r.at)}</div><div class="a">${esc(r.summary)}</div>${(r.open||[]).map(x=>`<div class="q" style="margin-top:8px">${esc(x.q)}</div><div class="a">${x.a?esc(x.a):'<span class="muted">（没回答）</span>'}</div>${x.aAt?`<div class="stamp-date">${fmt(x.aAt)}</div>`:""}`).join("")}</div>`).join("");
+    }
+    h+=`<h3 style="font-size:17px;margin:16px 0 8px">思路整理${rounds.length>1?`（第 ${rounds.length} 次）`:""} <span class="stamp-date">${fmt(last.at)}</span></h3>${renderSummary(last.summary)}`;
+    if(!locked&&S.sample!==null&&!/【我的看法】/.test(last.summary))h+=`<div class="actions"><button class="btn ghost small" data-act="iv-finish" ${busy?"disabled":""}>${busy==="sum"?"整理中…":"重新整理，加上 Claude 的看法"}</button></div>`;
+    const open=last.open||[];
+    if(open.length&&(iv.enough||locked)&&!S.open["oq-"+d.id]){
+      h+=`<div style="margin-top:14px"><button class="link small" data-act="toggle" data-key="oq-${d.id}">看还没想清楚的地方（${open.length} 条）</button>${iv.enough?`<span class="stamp-date">，${fmt(iv.enoughAt)} 说够了</span>`:""}</div>`;
+    }else if(open.length){
+      h+=`<h3 style="font-size:17px;margin:20px 0 4px">还没想清楚的地方${iv.enough||locked?` <button class="link small" data-act="toggle" data-key="oq-${d.id}">收起</button>`:""}</h3>`;
+      h+=open.map((x,i)=>{const k=`op-${d.id}-${i}`;return `<div class="open-q"><div class="q">${esc(x.q)}</div>${locked||x.a||iv.enough?`<div class="a" style="white-space:pre-wrap;color:var(--ink-soft)">${x.a?esc(x.a):'<span class="muted">（没回答）</span>'}</div>${x.aAt?`<div class="stamp-date">${fmt(x.aAt)}</div>`:""}`:`<textarea data-draft="${k}" style="min-height:60px" placeholder="想清楚了就写下来">${esc(S.drafts[k]||"")}</textarea>`}</div>`}).join("");
+      if(!locked&&!iv.enough&&open.some(x=>!x.a))h+=`<p class="small muted" style="margin:4px 0 0">不用每条都答，答你在意的就好。${rounds.length>=2?"下一次整理是最后一次，不会再问了。":"最多再追问一轮。"}</p><div class="actions"><button class="btn" data-act="iv-resum" ${busy?"disabled":""}>${busy==="sum"?"整理中…":"回答完了，重新总结"}</button><button class="btn ghost small" data-act="iv-enough" ${busy?"disabled":""}>够了，不用再问</button></div>`;
+      if(iv.enough)h+=`<p class="note">你在 ${fmt(iv.enoughAt)} 说够了，不再追问。</p>`;
+    }else if(iv.rounds){h+=`<p class="note">Claude 觉得没有明显还没想清楚的地方了。</p>`}
+    else if(!locked&&S.sample!==null){h+=`<div class="actions"><button class="btn ghost small" data-act="iv-finish" ${busy?"disabled":""}>重新整理，把还没想清楚的地方列出来让我回答</button></div>`}
+    if(busy==="sum")h+=`<div class="question muted" id="iv-q">整理中…</div>`;
+    if(err)h+=`<p class="err small">${esc(err)}</p>`;
+    if(!locked&&S.sample===null){const mk="mre-"+d.id;h+=S.open[mk]?manualIvBox(d,true):`<div class="actions"><button class="btn ghost small" data-act="toggle" data-key="${mk}">在 Claude app 再拷问一次</button></div>`}
+    else if(!locked)h+=`<div class="actions"><button class="btn ghost small" data-act="iv-restart">重新拷问一次</button></div>`;
+    return h;
+  }
+  if(iv.skipped){
+    h+=`<p class="note">这一步跳过了（${fmt(iv.skippedAt)}）。</p>`;
+    if(!locked)h+=`<button class="btn ghost small" data-act="iv-unskip">还是来拷问一下</button>`;
+    return h;
+  }
+  if(locked){h+=answered.length?"":`<p class="muted">封存前没做这一步。</p>`;return h}
+  const cur=qa.find(x=>x.a==null&&!x.skipped);
+  if(!iv.startedAt&&S.sample===null){
+    h+=manualIvBox(d,false);
+  }else if(!iv.startedAt){
+    h+=`<div class="actions"><button class="btn" data-act="iv-start" ${S.sample===null?"disabled":""}>开始拷问</button><button class="btn ghost" data-act="iv-skip">跳过这步</button></div>`;
+  }else if(cur){
+    h+=`<p class="small muted" style="margin:14px 0 0">第 ${qa.indexOf(cur)+1} / ${QUESTIONS} 题</p><div class="question" id="iv-q">${esc(cur.q)}</div>
+    <textarea data-draft="ans-${d.id}" placeholder="老实回答，没人看">${esc(S.drafts["ans-"+d.id]||"")}</textarea>
+    <div class="actions"><button class="btn" data-act="iv-answer" ${busy?"disabled":""}>回答</button><button class="btn ghost small" data-act="iv-pass" ${busy?"disabled":""}>这题跳过</button><button class="btn ghost small" data-act="iv-finish" ${busy||!answered.length?"disabled":""}>够了，直接总结</button></div>`;
+  }else if(busy){
+    h+=`<div class="question muted" id="iv-q">${esc(S.busy["iv-"+d.id]==="sum"?"整理中…":"想下一题…")}</div>`;
+  }else{
+    h+=`<div class="actions"><button class="btn" data-act="iv-next">${answered.length>=QUESTIONS?"出总结":"继续下一题"}</button><button class="btn ghost small" data-act="iv-skip">跳过这步</button></div>`;
+  }
+  if(err)h+=`<p class="err small">${esc(err)}</p>`;
+  return h;
+}
+
+function sameDay(iso){return !!iso&&new Date(iso).toDateString()===new Date().toDateString()}
+function draftFromVersion(v){return{mode:v.mode||"direct",conds:v.conds?clone(v.conds):{},checkBy:v.checkBy||"",defaultOpt:v.defaultOpt||"",optionId:v.optionId||"",reason:v.reason||"",whyNot:v.whyNot||"",expect:v.expect||"",moods:[...(v.moods||[])],moodNote:v.moodNote||"",confidence:v.confidence!=null?v.confidence:60,reversible:v.reversible||"",letter:v.letter||"",from:v.at||null}}
+function versionCard(d,v,i,locked,latest){
+  const opt=d.options.find(o=>o.id===v.optionId);const key=`fv-${d.id}-${i}`;const open=S.open[key];
+  let h=`<div class="vcard${latest?" latest":""}"><div class="vhead"><div><div class="stamp-date">第 ${i+1} 版，${fmt(v.at)}${v.editedAt?`，改于 ${fmt(v.editedAt).slice(-5)}`:""}${v.from?`，改自 ${fmtShort(v.from)} 那版`:""}${latest?"，最新":""}</div><div class="vchoice">${v.mode==="cond"?esc(condSummary(d,v.conds,v.defaultOpt)):opt?"选："+esc(opt.name):"还没选"}</div></div>${v.confidence!=null?`<div class="vconf">${v.confidence}%<span class="stamp-date">信心</span></div>`:""}</div>`;
+  if(v.reason)h+=`<p class="vreason${open?"":" clamp"}">${esc(v.reason)}</p>`;
+  if(open)h+=`<dl class="vdl">${v.mode==="cond"?condListHTML(d,v):`<dt>为什么没选其他的</dt><dd>${esc(v.whyNot)||"—"}</dd>`}<dt>预计会发生</dt><dd>${esc(v.expect)||"—"}</dd><dt>心情</dt><dd>${esc([...(v.moods||[]),v.moodNote].filter(Boolean).join("、"))||"—"}</dd><dt>能不能回头</dt><dd>${esc(v.reversible)||"—"}</dd><dt>给未来自己的一句话</dt><dd>${esc(v.letter)||"—"}</dd></dl>`;
+  h+=`<div class="actions"><button class="link small" data-act="toggle" data-key="${key}">${open?"收起":"看全部"}</button>${locked?"":`${sameDay(v.at)?`<button class="btn ghost small" data-act="fv-inplace" data-i="${i}">修改这一版</button>`:`<button class="btn ghost small" data-act="fv-edit" data-i="${i}">拿这版来改</button>`}<button class="btn small" data-act="fv-seal" data-i="${i}">封存这一版</button>`}</div></div>`;
+  return h;
+}
+function versionList(d,locked){const vs=d.finalDrafts||[];return vs.map((v,i)=>({v,i})).reverse().map(({v,i})=>versionCard(d,v,i,locked,!locked&&i===vs.length-1)).join("")}
+function viewSealForm(d){
+  const vs=d.finalDrafts||[];
+  const editing=!vs.length||S.open["sf-"+d.id];
+  let h="";
+  if(vs.length){
+    h+=`<p class="muted small" style="margin-top:0">还没到决定日期就先存着。每次想法变了就存一版，旧的都会留着，封存前随时可以拿来改。</p>${versionList(d,false)}`;
+    if(!editing)h+=`<div class="actions"><button class="btn ghost" data-act="fv-new">写一个新想法</button></div>`;
+  }
+  if(editing)h+=sealFormHTML(d);
+  return h;
+}
+function sealFormHTML(d){
+  const k="seal-"+d.id;
+  const dr=S.drafts[k]||(S.drafts[k]={optionId:"",reason:"",whyNot:"",expect:"",moods:[],moodNote:"",confidence:60,reversible:"",letter:""});
+  if(!dr.mode)dr.mode="direct";if(!dr.conds)dr.conds={};if(dr.checkBy==null)dr.checkBy=d.decideBy||"";if(dr.defaultOpt==null)dr.defaultOpt="";
+  const cond=dr.mode==="cond";
+  let h=`<div class="sealbox">${dr.editIdx!=null?`<p class="note">正在修改今天 ${fmt(dr.editAt).slice(-5)} 那一版，保存会直接改在这一版上。</p>`:""}${dr.from?`<p class="note">正在改 ${fmt(dr.from)} 那一版。保存后会多一版新的，旧的照样留着。</p>`:""}<p class="muted small">想法还没定就按“保存这个想法”。写完按封存，日期自动记下，之后就不能改了。</p>
+  <label class="f">怎么决定</label>
+  <div class="chips"><button class="chip" data-act="seal-mode" data-m="direct" aria-pressed="${!cond}">直接选一个</button><button class="chip" data-act="seal-mode" data-m="cond" aria-pressed="${cond}">条件式决定</button></div>`;
+  if(!cond){
+    h+=`<label class="f">选了哪个</label>
+  <div class="chips">${d.options.map(o=>`<button class="chip" data-act="seal-opt" data-o="${o.id}" aria-pressed="${dr.optionId===o.id}">${esc(o.name)}</button>`).join("")}</div>
+  <label class="f" for="s-reason">为什么选它</label><textarea id="s-reason" data-draft="${k}.reason">${esc(dr.reason)}</textarea>
+  <label class="f" for="s-whynot">为什么没选其他的</label><textarea id="s-whynot" data-draft="${k}.whyNot">${esc(dr.whyNot)}</textarea>`;
+  }else{
+    h+=`<p class="small muted" style="margin:10px 0 0">每个选项写“达到什么就选它”。要写到时候答案很清楚的事，例如“经理答应调岗”，不要写“感觉对了”。</p>`;
+    for(const o of d.options){
+      const c=dr.conds[o.id]||(dr.conds[o.id]={rule:"all",items:[]});
+      const ak=`cadd-${d.id}-${o.id}`;
+      h+=`<div class="condbox"><div class="cond-h"><b>${esc(o.name)}</b><div class="chips">${["all","any"].map(r=>`<button class="chip sm" data-act="cond-rule" data-o="${o.id}" data-r="${r}" aria-pressed="${c.rule===r}">${r==="all"?"全部达到":"任何一个"}</button>`).join("")}</div></div>
+      ${c.items.map((it,i)=>`<div class="cond-item"><span class="cn">${CIRC[i]||i+1}</span><input type="text" data-cond="${o.id}" data-ci="${it.id}" value="${esc(it.text)}" aria-label="条件"><button class="x" data-act="cond-del" data-o="${o.id}" data-ci="${it.id}" aria-label="删除条件">×</button></div>`).join("")}
+      <div class="add"><input type="text" data-draft="${ak}" value="${esc(S.drafts[ak]||"")}" placeholder="达到什么就选${esc(o.name)}？" data-enter="cond-add" data-o="${o.id}"><button class="btn small ghost" data-act="cond-add" data-o="${o.id}">加</button></div></div>`;
+    }
+    h+=`<label class="f" for="s-checkby">最晚检查日期</label><input type="date" id="s-checkby" data-draft="${k}.checkBy" value="${esc(dr.checkBy)}">
+  <label class="f">到期都没达到，就选</label>
+  <div class="chips">${d.options.map(o=>`<button class="chip" data-act="seal-default" data-o="${o.id}" aria-pressed="${dr.defaultOpt===o.id}">${esc(o.name)}</button>`).join("")}</div>
+  <label class="f" for="s-reason">为什么这样定规则</label><textarea id="s-reason" data-draft="${k}.reason">${esc(dr.reason)}</textarea>`;
+  }
+  h+=`<h3 style="font-size:18px;margin:26px 0 0">当时的我</h3>
+  <label class="f" for="s-expect">${cond?"你觉得最后会触发哪个？之后会发生什么？":"我预计会发生什么"}</label><textarea id="s-expect" data-draft="${k}.expect" placeholder="半年、一年后大概会是什么样子？">${esc(dr.expect)}</textarea>
+  <label class="f">现在的心情</label>
+  <div class="chips">${MOODS.map(m=>`<button class="chip" data-act="seal-mood" data-m="${m}" aria-pressed="${dr.moods.includes(m)}">${m}</button>`).join("")}</div>
+  <input type="text" style="margin-top:8px" data-draft="${k}.moodNote" value="${esc(dr.moodNote)}" placeholder="补一句（可不填）">
+  <label class="f" for="s-conf">${cond?"对这套规则的信心":"信心程度"}</label>
+  <div class="conf"><input type="range" id="s-conf" min="0" max="100" step="5" value="${dr.confidence}" data-draft="${k}.confidence"><output id="s-conf-out">${dr.confidence}%</output></div>
+  <label class="f">这个决定能回头吗</label>
+  <div class="chips">${REVERSIBLE.map(m=>`<button class="chip" data-act="seal-rev" data-m="${m}" aria-pressed="${dr.reversible===m}">${m}</button>`).join("")}</div>
+  <label class="f" for="s-letter">给未来自己的一句话</label><textarea id="s-letter" data-draft="${k}.letter" placeholder="如果以后后悔了，记得……">${esc(dr.letter)}</textarea>
+  <div class="actions"><button class="btn ghost" data-act="fv-save">${dr.editIdx!=null?"保存修改":"保存这个想法"}</button><button class="btn vermilion" data-act="seal">${cond?"封存这套规则":"封存锦囊"}</button>${(d.finalDrafts||[]).length?`<button class="link small" data-act="fv-cancel">取消</button>`:""}</div></div>`;
+  return h;
+}
+
+function ruleLines(d){
+  const r=d.final.rule;let h="";
+  for(const o of d.options){const c=r.conds[o.id];if(!c||!c.items.length)continue;
+    h+=`<div class="rule"><div class="rule-if">如果${c.rule==="all"?"以下全部达到":"以下任何一个达到"}</div><ol>${c.items.map(it=>`<li>${esc(it.text)}</li>`).join("")}</ol><div class="rule-then">就选「${esc(o.name)}」</div></div>`}
+  const def=d.options.find(o=>o.id===r.defaultOpt);
+  h+=`<div class="rule"><div class="rule-if">到 ${fmtDay(r.checkBy)} 都没触发</div><div class="rule-then">就选「${esc(def?def.name:"?")}」</div></div>`;
+  return h;
+}
+function condPanel(d){
+  const st=condState(d);const rule=d.final.rule;const ruled=d.status==="ruled";const checks=d.checks||{};
+  let h=`<div class="sealbox" style="margin-top:18px"><h3 style="font-size:18px;margin:14px 0 4px">${ruled?"条件检查":"条件记录"}</h3>`;
+  if(ruled)h+=`<p class="small muted" style="margin:0 0 6px">达到一条就回来打勾，会记日期。最晚 ${fmtDay(rule.checkBy)} 要决定${st.daysLeft!=null&&st.daysLeft>0?`，还有 ${st.daysLeft} 天`:""}。</p>`;
+  for(const r of st.res){
+    h+=`<div class="condbox"><div class="cond-h"><b>${esc(r.o.name)}</b><span class="stamp-date">${r.c.rule==="all"?"全部达到":"任何一个"}，${r.done}/${r.total}${r.met?"，已达到":""}</span></div>${r.c.items.map((it,i)=>`<button class="tick" data-act="cond-tick" data-ci="${it.id}" aria-pressed="${!!checks[it.id]}" ${ruled?"":"disabled"}><span class="box">${checks[it.id]?"✓":""}</span><span class="tt">${CIRC[i]||i+1} ${esc(it.text)}${checks[it.id]?`<span class="stamp-date">达到于 ${fmt(checks[it.id])}</span>`:""}</span></button>`).join("")}</div>`;
+  }
+  const noteBox=`<label class="f" for="oc-note">补充一下实际情况（可不填）</label><textarea id="oc-note" data-draft="oc-${d.id}" style="min-height:60px">${esc(S.drafts["oc-"+d.id]||"")}</textarea>`;
+  if(ruled){
+    if(st.trig){
+      h+=`<div class="trigger${S.freshTrig===d.id?" fresh":""}"><div class="label">触发</div><div class="chosen">选「${esc(st.trig.o.name)}」</div><div class="stamp-date">${fmt(st.trig.metAt)} 达到条件</div></div>${noteBox}<div class="actions"><button class="btn" data-act="oc-confirm" data-o="${st.trig.o.id}" data-how="triggered">确认：选${esc(st.trig.o.name)}</button></div>`;
+    }else if(st.overdue||st.dueToday){
+      const def=d.options.find(o=>o.id===rule.defaultOpt);
+      h+=`<p class="note">${st.overdue?"已经过了检查日期":"今天就是检查日期"}，条件都没达到。照规则，走默认选项「${esc(def?def.name:"?")}」。</p>${noteBox}<div class="actions"><button class="btn" data-act="oc-confirm" data-o="${rule.defaultOpt}" data-how="default">确认：选${esc(def?def.name:"?")}</button></div>`;
+    }
+    const mk="ocm-"+d.id;
+    h+=`<details class="manual" data-tog="man-${d.id}" ${S.open["man-"+d.id]?"open":""}><summary>不照规则，直接决定</summary><p class="small muted">可以，但会记下来，复盘时会看到你没照规则走。</p><div class="chips">${d.options.map(o=>`<button class="chip" data-act="oc-pick" data-o="${o.id}" aria-pressed="${S.drafts[mk]===o.id}">${esc(o.name)}</button>`).join("")}</div><label class="f" for="ocm-note">为什么不照规则</label><textarea id="ocm-note" data-draft="ocmn-${d.id}" style="min-height:60px">${esc(S.drafts["ocmn-"+d.id]||"")}</textarea><div class="actions"><button class="btn ghost" data-act="oc-manual">确认</button></div></details>`;
+  }else if(d.outcome){
+    const o=d.options.find(o=>o.id===d.outcome.optionId);const how={triggered:"条件触发",default:"到期没触发，走默认选项",manual:"没照规则，直接决定"}[d.outcome.how];
+    h+=`<div class="trigger"><div class="label">最终决定</div><div class="chosen">选「${esc(o?o.name:"?")}」</div><div class="stamp-date">${how}，${fmt(d.outcome.at)}</div>${d.outcome.note?`<p>${esc(d.outcome.note)}</p>`:""}</div>`;
+  }
+  return h+`</div>`;
+}
+
+function viewSealed(d){
+  const f=d.final,sn=d.snapshot||{};
+  const opt=d.options.find(o=>o.id===f.optionId);
+  const cond=f.mode==="cond";
+  return `<div class="pouch"><div class="seal ${S.freshSeal===d.id?"fresh":""}" aria-hidden="true">封</div>
+  ${cond?`<div class="label">锦囊妙计，封存于 ${fmtShort(f.decidedAt)}</div><div class="chosen">如果……就……</div><div class="rules">${ruleLines(d)}</div>
+  <dl><dt>为什么这样定规则</dt><dd>${esc(f.reason)||"—"}</dd>`:`<div class="label">选了</div><div class="chosen">${esc(opt?opt.name:"?")}</div>
+  <dl>
+  <dt>为什么选它</dt><dd>${esc(f.reason)||"—"}</dd>
+  <dt>为什么没选其他的</dt><dd>${esc(f.whyNot)||"—"}</dd>`}
+  <dt>当时预计会发生</dt><dd>${esc(sn.expect)||"—"}</dd>
+  <dt>当时的心情</dt><dd>${esc([...(sn.moods||[])].join("、"))}${sn.moodNote?(sn.moods&&sn.moods.length?"；":"")+esc(sn.moodNote):""}${!sn.moodNote&&!(sn.moods||[]).length?"—":""}</dd>
+  <dt>信心程度</dt><dd>${sn.confidence!=null?sn.confidence+"%":"—"}</dd>
+  <dt>能不能回头</dt><dd>${esc(sn.reversible)||"—"}</dd>
+  <dt>给未来自己的一句话</dt><dd>${esc(sn.letter)||"—"}</dd>
+  </dl></div>${cond?condPanel(d):""}${(d.finalDrafts||[]).length?`<div style="margin-top:16px"><button class="link small" data-act="toggle" data-key="fvh-${d.id}">${S.open["fvh-"+d.id]?"收起":"看"}封存前的想法变化（${d.finalDrafts.length} 版）</button>${S.open["fvh-"+d.id]?`<div style="margin-top:10px">${versionList(d,true)}</div>`:""}</div>`:""}`;
+}
+
+function quadLabel(q,o){
+  if(q>=4&&o>=4)return"好决定，好结果。当时的你没那么蠢。";
+  if(q>=4&&o<=2)return"好决定，结果烂：这是运气差，不是你蠢。";
+  if(q<=2&&o>=4)return"决定一般，走了狗屎运。别以为下次也会。";
+  if(q<=2&&o<=2)return"决定有问题，结果也烂。记下教训就好，别光骂。";
+  return"中间地带，正常人生。";
+}
+function viewReviews(d){
+  const now=nowISO();
+  let h=`<p class="muted small" style="margin-top:0">复盘时分开看两件事：以当时知道的信息，这个决定合不合理；结果本身好不好。后来才知道的事，写在“后来才发现的”里。</p>`;
+  const sorted=(d.reviews||[]).slice().sort((a,b)=>a.due.localeCompare(b.due));
+  for(const r of sorted){
+    h+=`<div class="review"><h3>${esc(r.label)} <span class="stamp-date">${r.done?"复盘于 "+fmt(r.done.at):"预定 "+fmtDay(r.due)}</span></h3>`;
+    if(r.done){
+      const x=r.done;
+      h+=`<dl class="rv-card"><dt>实际发生了什么</dt><dd>${esc(x.actual)||"—"}</dd><dt>后来才发现的</dt><dd>${esc(x.later)||"—"}</dd><dt>决定质量 / 结果好坏</dt><dd>${x.quality} / 5，${x.outcome} / 5</dd><dd class="quad">${quadLabel(x.quality,x.outcome)}</dd>${x.rule?`<dt>规则合理吗</dt><dd>${esc(x.rule)}</dd>`:""}${x.note?`<dt>备注</dt><dd>${esc(x.note)}</dd>`:""}</dl>`;
+    }else if(r.due<=now||S.open["rv-"+d.id+r.key]){
+      const k=`rv-${d.id}-${r.key}`;const dr=S.drafts[k]||(S.drafts[k]={actual:"",later:"",quality:0,outcome:0,note:""});
+      h+=`<div class="sealbox"><p class="note">先回头看看上面的锦囊：当时你预计的、你的信心和心情。再来写。</p>
+      <label class="f">实际发生了什么</label><textarea data-draft="${k}.actual">${esc(dr.actual)}</textarea>
+      <label class="f">后来才发现的（当时不可能知道的事）</label><textarea data-draft="${k}.later">${esc(dr.later)}</textarea>
+      ${d.final&&d.final.mode==="cond"?`<label class="f">当初定的规则，现在看合理吗</label><textarea data-draft="${k}.rule">${esc(dr.rule||"")}</textarea>`:""}
+      <label class="f">决定质量：以当时知道的信息，这决定合理吗</label>
+      <div class="rate">${[1,2,3,4,5].map(n=>`<button class="pip" data-act="rv-rate" data-key="${k}" data-f="quality" data-v="${n}" aria-pressed="${dr.quality===n}">${n}</button>`).join("")}</div>
+      <label class="f">结果好坏</label>
+      <div class="rate">${[1,2,3,4,5].map(n=>`<button class="pip" data-act="rv-rate" data-key="${k}" data-f="outcome" data-v="${n}" aria-pressed="${dr.outcome===n}">${n}</button>`).join("")}</div>
+      <label class="f">备注</label><textarea data-draft="${k}.note" style="min-height:60px">${esc(dr.note)}</textarea>
+      <div class="actions"><button class="btn" data-act="rv-save" data-r="${r.key}">完成复盘</button></div></div>`;
+    }else{
+      h+=`<button class="link small" data-act="toggle" data-key="rv-${d.id}${r.key}">提早复盘</button>`;
+    }
+    h+=`</div>`;
+  }
+  h+=`<div class="actions"><button class="btn ghost small" data-act="rv-adhoc">现在多加一次复盘</button></div>`;
+  const notes=d.notes||[];
+  h+=`<h3 style="font-size:17px;margin:26px 0 6px">追加备注</h3>${notes.map(n=>`<div class="qa"><div class="a" style="margin:0">${esc(n.text)}</div><div class="stamp-date">${fmt(n.at)}</div></div>`).join("")}
+  <textarea data-draft="note-${d.id}" style="min-height:60px" placeholder="想到什么就补一句，会记日期">${esc(S.drafts["note-"+d.id]||"")}</textarea>
+  <div class="actions"><button class="btn ghost small" data-act="addnote">追加</button></div>`;
+  return h;
+}
+
+/* SETTINGS */
+function viewBackup(){
+  const lb=S.settings.lastBackup;const g=S.settings.gas;
+  const busy=S.busy.backup,err=S.err.backup;
+  let h=`<div class="dhead"><h1>设置</h1></div>
+  <section class="step"><div class="step-h"><h2>账号和同步</h2></div>
+  <p style="margin-top:0">${syncLine()}</p>
+  ${S.email?`<p class="small muted">登入的账号：${esc(S.email)}（跟书斋同一个）</p>`:""}
+  <div class="actions">${S.mode==="db"?`<button class="btn ghost small" data-act="sync-now">现在同步</button><button class="btn ghost small" data-act="signout">登出</button>`:""}<button class="link small" data-act="cfg-reset">更换 Supabase 设定</button></div></section>
+  <section class="step"><div class="step-h"><h2>Google Drive 自动备份</h2></div>`;
+  if(g){
+    h+=`<p class="small muted" style="margin-top:0">已开启。每天第一次打开会备份一次，封存锦囊、确认最终决定、完成复盘时也会备份。存在 Drive 的「${ROOT_FOLDER_TITLE} / ${APP_FOLDER_TITLE}」，同一天只留一个，保留 60 天。</p>
+    <p>${lb?`上次备份：${fmt(lb.at)}${lb.url?`，<a href="${esc(lb.url)}" target="_blank" rel="noopener">打开文件</a>`:""}`:"还没备份过。"}</p>
+    <div class="actions"><button class="btn" data-act="bk-now" ${busy?"disabled":""}>${busy==="backup"?"备份中…":"立即备份"}</button><button class="btn ghost" data-act="bk-list" ${busy?"disabled":""}>${busy==="list"?"读取中…":"从 Drive 还原"}</button><button class="link small" data-act="gas-off">关掉自动备份</button></div>`;
+  }else{
+    h+=`<p class="small muted" style="margin-top:0">资料本身已经在 Supabase 云端。想再多一层保险，可以让它每天自动备份到 Drive 的「${ROOT_FOLDER_TITLE} / ${APP_FOLDER_TITLE}」。设定一次，手机和 iPad 都会用。</p>
+    <details class="gasset" ${S.open.gas?"open":""} data-tog="gas"><summary>设定自动备份（大约 5 分钟，只做一次）</summary>
+    <ol class="gasol">
+      <li>按 <button type="button" class="btn small" data-act="gas-copy">复制脚本</button></li>
+      <li>用浏览器打开 <a href="https://script.google.com/home/projects/create" target="_blank" rel="noopener">script.google.com</a>，会开一个新项目。把里面原本的字全部删掉，贴上脚本，按保存。</li>
+      <li>右上角 <b>部署 → 新建部署</b>，齿轮选 <b>网页应用</b>。「执行身份」选 <b>我</b>，「谁可以访问」选 <b>任何人</b>，按部署。</li>
+      <li>它会要你授权：选你的账号 → 「Google 没有验证这个应用」→ <b>高级 → 前往（不安全）</b> → 允许。这是你自己的脚本，只有你在用。</li>
+      <li>复制它给你的 <b>网页应用网址</b>（https://script.google.com/macros/s/…/exec），贴在下面：</li>
+    </ol>
+    <div class="add"><input type="text" data-draft="gasurl" value="${esc(S.drafts.gasurl||"")}" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"><button class="btn small" data-act="gas-test" ${busy?"disabled":""}>${busy==="test"?"连接中…":"连接"}</button></div></details>`;
+  }
+  if(err)h+=`<p class="err small">${esc(err)}</p>`;
+  if(S.restoreList){
+    h+=`<h3 style="font-size:17px;margin:20px 0 6px">选一个备份来还原</h3>`;
+    if(!S.restoreList.length)h+=`<p class="muted">文件夹里没有备份。</p>`;
+    h+=S.restoreList.map(f=>`<div class="entry" style="display:flex;gap:10px;align-items:center"><span style="flex:1">${esc(f.name)}<br><span class="stamp-date">${fmt(f.date)}</span></span><button class="btn small ghost" data-act="bk-restore" data-id="${esc(f.id)}" ${busy?"disabled":""}>还原</button></div>`).join("");
+    h+=`<p class="small muted">还原时，备份里有的决定会覆盖这里同一个决定；备份里没有的，保留不动。</p>`;
+  }
+  h+=`</section>
+  <section class="step"><div class="step-h"><h2>备份文件</h2></div>
+  <p class="small muted" style="margin-top:0">存一份到这台设备，或者把旧版（Claude 里那个）的备份文件导入进来。</p>
+  <div class="actions"><button class="btn ghost" data-act="bk-download">下载备份文件</button><button class="btn ghost" data-act="bk-import">导入备份文件</button></div></section>
+  <section class="step"><div class="step-h"><h2>密码锁</h2></div>${viewLockSettings()}</section>
+  <section class="step"><div class="step-h"><h2>新决定的默认打分维度</h2></div>${dimChips(S.settings.dims,"set-dim")}</section>`;
+  return h;
+}
+
+/* ---------- actions ---------- */
+function curDecision(){const r=route();return r.v==="d"?S.decisions.get(r.id):null}
+
+function getDraftPath(path){const [k,f]=path.split(".");return f?(S.drafts[k]||{})[f]:S.drafts[k]}
+function setDraftPath(path,val){const [k,f]=path.split(".");if(f){(S.drafts[k]=S.drafts[k]||{})[f]=val}else S.drafts[k]=val}
+
+function autosize(el){if(CSS.supports&&CSS.supports("field-sizing","content"))return;el.style.height="auto";el.style.height=(el.scrollHeight+2)+"px"}
+app.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.tagName==="TEXTAREA")autosize(t);
+  if(t.dataset.cond){const d=curDecision();const c=d&&S.drafts["seal-"+d.id]&&S.drafts["seal-"+d.id].conds[t.dataset.cond];const it=c&&c.items.find(i=>i.id===t.dataset.ci);if(it)it.text=t.value}
+  if(t.dataset.draft){setDraftPath(t.dataset.draft,t.type==="range"?Number(t.value):t.value);if(t.type==="range"){const o=$("#s-conf-out");if(o)o.textContent=t.value+"%"}}
+  if(t.dataset.nd){S.drafts.new[t.dataset.nd]=t.value}
+  if(t.dataset.nopt!=null){S.drafts.new.options[+t.dataset.nopt]=t.value}
+});
+app.addEventListener("change",e=>{
+  const t=e.target,d=curDecision();
+  if(t.dataset.lockafter!=null){try{localStorage.setItem("shzgl-lockafter",String(+t.value))}catch(e){}toast("这台设备改好了");return}
+  if(!d||isSealed(d))return;
+  if(t.dataset.enter==="cond-add"){handle("cond-add",t);return}
+  if(t.dataset.ed){
+    const f=t.dataset.ed,v=f==="title"?t.value.trim():t.value;
+    if(f==="title"&&!v){t.value=d.title;return}
+    if(d[f]===v)return;
+    const names={title:"标题",context:"情境说明",decideBy:"决定日期"};
+    d[f]=v;persist(d,`修改${names[f]}`);
+  }else if(t.dataset.optname){
+    const o=d.options.find(o=>o.id===t.dataset.optname);const v=t.value.trim();
+    if(!o||!v||o.name===v){if(o)t.value=o.name;return}
+    const old=o.name;o.name=v;persist(d,`选项“${old}”改名为“${v}”`);
+  }else if(t.dataset.itemtext){
+    const o=d.options.find(o=>o.id===t.dataset.o);const it=o&&o.items.find(i=>i.id===t.dataset.itemtext);const v=t.value.trim();
+    if(!it||!v||it.text===v){if(it)t.value=it.text;return}
+    const old=it.text;it.text=v;it.updatedAt=nowISO();persist(d,`${o.name}：“${old}”改为“${v}”`);
+  }
+});
+app.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&e.target.dataset.enter){e.preventDefault();e.target.blur();handle(e.target.dataset.enter,e.target)}
+});
+app.addEventListener("toggle",e=>{if(e.target.dataset&&e.target.dataset.tog)S.open[e.target.dataset.tog]=e.target.open},true);
+app.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b||b.disabled)return;
+  e.preventDefault();handle(b.dataset.act,b);
+});
+
+async function handle(act,b){
+  const ae=document.activeElement;if(ae&&ae!==b&&app.contains(ae)&&ae.blur)ae.blur();
+  const d=curDecision();
+  switch(act){
+  case "n-addopt":S.drafts.new.options.push("");render();break;
+  case "n-delopt":S.drafts.new.options.splice(+b.dataset.i,1);render();break;
+  case "n-dim":toggleIn(S.drafts.new.dims,b.dataset.k);render();break;
+  case "n-create":{
+    const dr=S.drafts.new;const title=dr.title.trim();const opts=dr.options.map(s=>s.trim()).filter(Boolean);
+    if(!title){toast("先写个标题");return}
+    if(opts.length<2){toast("至少要两个选项，不然你在纠结什么");return}
+    if(!dr.dims.length){toast("至少选一个打分维度");return}
+    const at=nowISO();
+    const nd={id:uid(),title,context:dr.context.trim(),decideBy:dr.decideBy||"",createdAt:at,status:"thinking",dims:[...dr.dims],
+      options:opts.map(n=>({id:uid(),name:n,createdAt:at,items:[]})),interview:{},log:[]};
+    delete S.drafts.new;
+    persist(nd,"建档");location.hash="d-"+nd.id;break;
+  }
+  case "addopt":{
+    const k="newopt-"+d.id;const v=(S.drafts[k]||"").trim();if(!v)return;
+    d.options.push({id:uid(),name:v,createdAt:nowISO(),items:[]});S.drafts[k]="";persist(d,`新增选项“${v}”`);break;
+  }
+  case "delopt":{
+    const o=d.options.find(o=>o.id===b.dataset.o);if(!o)return;
+    if(!await ask(`删除选项“${o.name}”和它的好处坏处？`))return;
+    d.options=d.options.filter(x=>x!==o);persist(d,`删除选项“${o.name}”`);break;
+  }
+  case "dim":toggleIn(d.dims,b.dataset.k);persist(d,`打分维度改为 ${d.dims.map(k=>DIMS[k].name).join(" × ")||"无"}`);break;
+  case "additem":{
+    const o=d.options.find(o=>o.id===b.dataset.o);const type=b.dataset.type;const k=`add-${o.id}-${type}`;const v=(S.drafts[k]||"").trim();if(!v)return;
+    const at=nowISO();o.items.push({id:uid(),type,text:v,scores:{},createdAt:at,updatedAt:at});S.drafts[k]="";
+    persist(d,`${o.name} 加${type==="pro"?"好处":"坏处"}“${v}”`);break;
+  }
+  case "delitem":{
+    const o=d.options.find(o=>o.id===b.dataset.o);const it=o.items.find(i=>i.id===b.dataset.it);if(!it)return;
+    o.items=o.items.filter(x=>x!==it);
+    const ms=mirrorsOf(d,it);const extra=ms.length?"，关联的条目保留并改回自己计分":"";
+    ms.forEach(x=>{if(!Object.keys(x.m.scores||{}).length)x.m.scores=clone(it.scores||{});delete x.m.mirrorOf});
+    persist(d,`${o.name} 删除${it.type==="pro"?"好处":"坏处"}“${it.text}”${extra}`);break;
+  }
+  case "score":{
+    const o=d.options.find(o=>o.id===b.dataset.o);const it=o.items.find(i=>i.id===b.dataset.it);const k=b.dataset.k,v=+b.dataset.v;
+    it.scores=it.scores||{};const old=it.scores[k];if(old===v)return;it.scores[k]=v;it.updatedAt=nowISO();
+    persist(d,`“${it.text}”${DIMS[k].name} ${old?old+" → ":""}${v}`);break;
+  }
+  case "toggle":S.open[b.dataset.key]=!S.open[b.dataset.key];render();break;
+  case "step":S.step[d.id]=+b.dataset.n;render();break;
+  case "itoggle":S.open[b.dataset.key]=b.dataset.open!=="true";render();break;
+  case "link-make":{
+    const src=findItem(d,{o:b.dataset.o,it:b.dataset.it});const tgt=findItem(d,{o:b.dataset.to,it:b.dataset.toIt});if(!src||!tgt)return;
+    let main=src,mir=tgt;
+    if(itemScore(src.it,d.dims)==null&&itemScore(tgt.it,d.dims)!=null){main=tgt;mir=src}
+    mir.it.mirrorOf={o:main.o.id,it:main.it.id};mir.it.updatedAt=nowISO();
+    S.open["lk-"+src.it.id]=false;
+    persist(d,`关联：${src.o.name}的“${src.it.text}”和${tgt.o.name}的“${tgt.it.text}”是同一件事，分数算在${main.o.name}那条`);break;
+  }
+  case "unlink":{
+    const x=findItem(d,{o:b.dataset.o,it:b.dataset.it});if(!x)return;
+    const m=findItem(d,x.it.mirrorOf);if(m&&!Object.keys(x.it.scores||{}).length)x.it.scores=clone(m.it.scores||{});
+    delete x.it.mirrorOf;x.it.updatedAt=nowISO();
+    persist(d,`取消关联：${x.o.name}的“${x.it.text}”，改回自己计分`);break;
+  }
+  case "iv-resum":ivResummary(d);break;
+  case "iv-enough":d.interview.enough=true;d.interview.enoughAt=nowISO();persist(d,"说够了，不再追问");break;
+  case "iv-start":case "iv-next":ivStart(d,act);break;
+  case "iv-copy":toast(await copyText(ivPrompt(d))?"复制好了，去 Claude app 贴上":"复制失败，长按选取文字试试");break;
+  case "iv-unskip":d.interview=Object.assign(d.interview||{},{skipped:false});persist(d,"取消跳过拷问");break;
+  case "iv-paste":{
+    const k="paste-"+d.id;const t=(S.drafts[k]||"").trim();
+    if(t.length<20){toast("先把 Claude 的整理整段贴进来");return}
+    const iv=d.interview=d.interview||{};const at=nowISO();
+    iv.startedAt=iv.startedAt||at;iv.skipped=false;
+    iv.rounds=iv.rounds||(iv.summary?[{summary:iv.summary,at:iv.summaryAt,open:[]}]:[]);
+    iv.rounds.push({summary:t,at,open:[],manual:true});iv.summary=t;iv.summaryAt=at;iv.enough=true;
+    delete S.drafts[k];S.open["mre-"+d.id]=false;
+    persist(d,iv.rounds.length>1?`贴上新的 Claude 思路整理（第 ${iv.rounds.length} 次）`:"贴上 Claude 的思路整理");break;
+  }
+  case "iv-skip":d.interview=Object.assign(d.interview||{},{skipped:true,skippedAt:nowISO()});persist(d,"跳过 Claude 拷问");break;
+  case "iv-restart":if(!await ask("重新拷问会清掉上次的问答和总结，确定？"))return;d.interview={};persist(d,"清除拷问，准备重来");break;
+  case "iv-answer":ivAnswer(d,false);break;
+  case "iv-pass":ivAnswer(d,true);break;
+  case "iv-finish":ivSummary(d);break;
+  case "seal-opt":S.drafts["seal-"+d.id].optionId=b.dataset.o;render();break;
+  case "seal-mood":toggleIn(S.drafts["seal-"+d.id].moods,b.dataset.m);render();break;
+  case "seal-rev":{const dr=S.drafts["seal-"+d.id];dr.reversible=dr.reversible===b.dataset.m?"":b.dataset.m;render();break}
+  case "seal":seal(d);break;
+  case "lock-on":showLock("set1");break;
+  case "lock-now":S.unlocked=false;location.hash="";render();break;
+  case "lock-change":lkAfterVerify=()=>showLock("set1");showLock("verify");break;
+  case "lock-off":lkAfterVerify=async()=>{if(!await ask("关掉密码锁？")){hideLock();return}S.settings.lock=null;persistSettings();hideLock();toast("密码锁关掉了")};showLock("verify");break;
+  case "bio-on":bioRegister();break;
+  case "bio-off":try{localStorage.removeItem(BIOK)}catch(e){}render();break;
+  case "seal-mode":S.drafts["seal-"+d.id].mode=b.dataset.m;render();break;
+  case "seal-default":{const dr=S.drafts["seal-"+d.id];dr.defaultOpt=dr.defaultOpt===b.dataset.o?"":b.dataset.o;render();break}
+  case "cond-rule":S.drafts["seal-"+d.id].conds[b.dataset.o].rule=b.dataset.r;render();break;
+  case "cond-add":{const ak=`cadd-${d.id}-${b.dataset.o}`;const v=(S.drafts[ak]||"").trim();if(!v)return;const dr=S.drafts["seal-"+d.id];(dr.conds[b.dataset.o]=dr.conds[b.dataset.o]||{rule:"all",items:[]}).items.push({id:uid(),text:v});S.drafts[ak]="";render();break}
+  case "cond-del":{const c=S.drafts["seal-"+d.id].conds[b.dataset.o];c.items=c.items.filter(i=>i.id!==b.dataset.ci);render();break}
+  case "cond-tick":{
+    if(d.status!=="ruled")return;d.checks=d.checks||{};const ci=b.dataset.ci;
+    let txt="";for(const c of Object.values(d.final.rule.conds))for(const it of c.items)if(it.id===ci)txt=it.text;
+    if(d.checks[ci]){if(!await ask(`取消“${txt}”的勾？`))return;delete d.checks[ci];persist(d,`取消条件：${txt}`)}
+    else{const before=condState(d).trig;d.checks[ci]=nowISO();const after=condState(d).trig;if(!before&&after)S.freshTrig=d.id;persist(d,`条件达到：${txt}`);if(!before&&after)ceremony("trigger","选「"+after.o.name+"」")}
+    break;
+  }
+  case "oc-confirm":confirmOutcome(d,b.dataset.o,b.dataset.how,(S.drafts["oc-"+d.id]||"").trim());break;
+  case "oc-pick":S.drafts["ocm-"+d.id]=S.drafts["ocm-"+d.id]===b.dataset.o?"":b.dataset.o;S.open["man-"+d.id]=true;render();break;
+  case "oc-manual":{const o=S.drafts["ocm-"+d.id];const n=(S.drafts["ocmn-"+d.id]||"").trim();if(!o){toast("先选一个");return}if(!n){toast("不照规则的话，写一下为什么");return}confirmOutcome(d,o,"manual",n);break}
+  case "fv-save":{
+    const k="seal-"+d.id;const dr=S.drafts[k];if(dr&&dr.mode==="cond")flushCondAdds(d,dr);
+    if(!dr||!(dr.optionId||dr.reason.trim()||dr.expect.trim()||dr.whyNot.trim()||(dr.mode==="cond"&&Object.values(dr.conds||{}).some(c=>c.items.length)))){toast("至少选一个或写点东西再保存");return}
+    const v={optionId:dr.optionId,reason:dr.reason.trim(),whyNot:dr.whyNot.trim(),expect:dr.expect.trim(),moods:[...dr.moods],moodNote:dr.moodNote.trim(),confidence:dr.confidence,reversible:dr.reversible,letter:dr.letter.trim(),at:nowISO(),mode:dr.mode||"direct"};
+    if(dr.mode==="cond"){v.conds=clone(dr.conds);v.checkBy=dr.checkBy;v.defaultOpt=dr.defaultOpt}
+    if(dr.from)v.from=dr.from;
+    d.finalDrafts=d.finalDrafts||[];
+    const old=dr.editIdx!=null?d.finalDrafts[dr.editIdx]:null;
+    const opt=d.options.find(o=>o.id===v.optionId);
+    let label;
+    if(old&&sameDay(old.at)){v.at=old.at;delete v.from;if(old.from)v.from=old.from;v.editedAt=nowISO();d.finalDrafts[dr.editIdx]=v;label=`修改第 ${dr.editIdx+1} 版`}
+    else{if(old)v.from=old.at;d.finalDrafts.push(v);label=`保存最终决定的想法（第 ${d.finalDrafts.length} 版${opt?"，倾向"+opt.name:""}）`}
+    delete S.drafts[k];S.open["sf-"+d.id]=false;
+    persist(d,label);toast(old&&v.editedAt?"已修改这一版，还没封存":"已保存，还没封存");break;
+  }
+  case "fv-new":delete S.drafts["seal-"+d.id];S.open["sf-"+d.id]=true;render();break;
+  case "fv-edit":{const v=d.finalDrafts[+b.dataset.i];S.drafts["seal-"+d.id]=draftFromVersion(v);S.open["sf-"+d.id]=true;render();const f=document.querySelector(".sealbox");if(f)f.scrollIntoView({block:"start"});break}
+  case "fv-inplace":{const i=+b.dataset.i;const v=d.finalDrafts[i];const dr=draftFromVersion(v);dr.from=null;dr.editIdx=i;dr.editAt=v.at;S.drafts["seal-"+d.id]=dr;S.open["sf-"+d.id]=true;render();const f=document.querySelector(".sealbox");if(f)f.scrollIntoView({block:"start"});break}
+  case "fv-cancel":delete S.drafts["seal-"+d.id];S.open["sf-"+d.id]=false;render();break;
+  case "fv-seal":{const v=d.finalDrafts[+b.dataset.i];S.drafts["seal-"+d.id]=draftFromVersion(v);S.open["sf-"+d.id]=true;const r=await seal(d);if(r==="cancel"){delete S.drafts["seal-"+d.id];S.open["sf-"+d.id]=false}if(!isSealed(d))render();break}
+  case "rv-rate":{const dr=S.drafts[b.dataset.key];dr[b.dataset.f]=+b.dataset.v;render();break}
+  case "rv-save":reviewSave(d,b.dataset.r);break;
+  case "rv-adhoc":{const key="adhoc"+Date.now().toString(36);d.reviews.push({key,label:"临时复盘",due:nowISO()});persist(d,"加一次临时复盘");break}
+  case "addnote":{const k="note-"+d.id;const v=(S.drafts[k]||"").trim();if(!v)return;(d.notes=d.notes||[]).push({at:nowISO(),text:v});S.drafts[k]="";persist(d,"追加备注");break}
+  case "deldec":if(!await ask(`删除“${d.title}”？删了就没了（Drive 备份里的不受影响）。`))return;if(d.status==="decided"&&!await ask("这个锦囊已经封存了。真的要删？"))return;deleteDecision(d.id);location.hash="";render();break;
+  case "bk-now":backupNow("手动");break;
+  case "bk-list":listBackups();break;
+  case "bk-restore":restore(b.dataset.id);break;
+  case "bk-download":downloadLocal();break;
+  case "bk-import":document.getElementById("importFile").click();break;
+  case "gas-copy":toast(await copyText(GAS_SCRIPT(gasKey()))?"脚本复制好了":"复制失败");break;
+  case "gas-test":gasConnect();break;
+  case "gas-off":if(!await ask("关掉 Google Drive 自动备份？之后要用得重新设定。"))return;S.settings.gas=null;persistSettings();render();break;
+  case "sync-now":repull();toast("同步中…");break;
+  case "signout":signOut();break;
+  case "cfg-reset":if(!await ask("清掉这台设备的 Supabase 设定，重新填网址和 key？"))return;try{localStorage.removeItem("shzgl.cfg")}catch(e){}if(window.DM_CONFIG&&window.DM_CONFIG.key){toast("设定写在 config.js 里，要改那个文件");return}location.reload();break;
+  case "set-dim":toggleIn(S.settings.dims,b.dataset.k);if(!S.settings.dims.length)S.settings.dims.push(b.dataset.k);persistSettings();render();break;
+  }
+}
+function toggleIn(arr,v){const i=arr.indexOf(v);if(i>=0)arr.splice(i,1);else arr.push(v)}
+
+/* ---------- interview (Claude) ---------- */
+function brief(d){
+  let s=`决定标题：${d.title}\n情境：${d.context||"（没写）"}\n决定日期：${d.decideBy||"没定"}\n打分维度（1-5）：${d.dims.map(k=>DIMS[k].name).join("、")}\n`;
+  for(const o of d.options){
+    s+=`\n选项「${o.name}」\n`;
+    for(const t of ["pro","con"]){const items=o.items.filter(i=>i.type===t);s+=`  ${t==="pro"?"好处":"坏处"}：${items.length?"":"（没写）"}\n`;items.forEach(i=>{const src=findItem(d,i.mirrorOf);if(src){s+=`   - ${i.text}（和「${src.o.name}」的“${src.it.text}”是同一件事）\n`;return}s+=`   - ${i.text}${Object.keys(i.scores||{}).length?"（"+d.dims.map(k=>i.scores[k]?DIMS[k].name+i.scores[k]:"").filter(Boolean).join("，")+"）":""}\n`})}
+  }
+  return s;
+}
+function qaText(qa){return qa.filter(x=>x.a!=null||x.skipped).map((x,i)=>`Q${i+1}：${x.q}\nA：${x.skipped?"（他跳过了这题）":x.a}`).join("\n\n")}
+function sampleErr(e){
+  const c=e&&e.code;
+  if(c==="not_granted")return"你没允许这个 app 用 Claude，这步可以跳过。";
+  if(c==="rate_limited")return"Claude 额度用完了，晚点再来，或者直接跳过这步。";
+  return"Claude 出错了："+(e&&e.message||"未知错误")+"。可以再按一次，或跳过这步。";
+}
+async function ivStart(d,act){
+  const sample=await getSample();
+  if(!sample){S.sample=null;render();return}
+  d.interview=d.interview||{};
+  if(!d.interview.startedAt){d.interview.startedAt=nowISO();d.interview.qa=[];d.interview.skipped=false;persist(d,"开始 Claude 拷问")}
+  const answered=d.interview.qa.filter(x=>x.a!=null||x.skipped).length;
+  if(answered>=QUESTIONS)return ivSummary(d);
+  ivAsk(d);
+}
+async function ivAsk(d){
+  const sample=await getSample();if(!sample)return;
+  const key="iv-"+d.id;S.busy[key]="q";S.err[key]=null;render();
+  const qa=d.interview.qa;const n=qa.length+1;
+  const prompt=`你在帮一个人把一个决定想清楚。用简体中文，语气可以带点调侃、毒舌，但问题要尖锐、具体、对他有用，不要客套。
+
+下面是他的决定资料：
+${brief(d)}
+
+${qa.length?"之前的问答：\n"+qaText(qa)+"\n\n":""}现在问第 ${n} 题（共 ${QUESTIONS} 题）。规则：
+- 只问一个问题，60 个字以内，不要编号、不要前言、不要解释。
+- 优先根据他上一题的回答追问，戳他回避或说不清的地方。
+- 不要重复之前问过的角度。可以考虑：真正的动机、最坏情况能不能承受、机会成本、能不能回头、10 分钟/10 个月/10 年后怎么看、别人的看法对他影响多大、是恐惧还是理性在做决定、有没有漏掉的选项、好处坏处里打分可疑的地方。
+- 直接输出问题本身。`;
+  try{
+    const r=await sample(prompt,{cache:false,onText:({text})=>{const el=$("#iv-q")||$("#iv-q2");if(el){el.classList.remove("muted");el.textContent=text}}});
+    const q=(r.text||"").trim().replace(/^["“]|["”]$/g,"");
+    if(!q)throw{message:"没生出问题"};
+    d.interview.qa.push({q,qAt:nowISO()});S.busy[key]=null;persist(d,`Claude 问了第 ${n} 题`);
+  }catch(e){S.busy[key]=null;S.err[key]=sampleErr(e);if(e&&e.code==="not_granted")S.sample=null;render()}
+}
+function ivAnswer(d,skip){
+  const k="ans-"+d.id;const v=(S.drafts[k]||"").trim();
+  if(!skip&&!v){toast("写点东西再按回答");return}
+  const cur=d.interview.qa.find(x=>x.a==null&&!x.skipped);if(!cur)return;
+  if(skip)cur.skipped=true;else cur.a=v;cur.aAt=nowISO();S.drafts[k]="";
+  const answered=d.interview.qa.filter(x=>x.a!=null||x.skipped).length;
+  persist(d,skip?`跳过第 ${answered} 题`:`回答第 ${answered} 题`);
+  if(answered>=QUESTIONS)ivSummary(d);else ivAsk(d);
+}
+function roundsText(iv){
+  return (iv.rounds||[]).map((r,i)=>{const ans=(r.open||[]).filter(x=>x.a);return ans.length?`第 ${i+1} 次整理后他补充回答：\n`+ans.map(x=>`Q：${x.q}\nA：${x.a}`).join("\n\n"):""}).filter(Boolean).join("\n\n");
+}
+async function ivSummary(d){
+  const sample=await getSample();if(!sample){S.sample=null;render();return}
+  const key="iv-"+d.id;
+  const iv=d.interview;
+  iv.qa=(iv.qa||[]).filter(x=>x.a!=null||x.skipped);
+  if(iv.summary&&!iv.rounds)iv.rounds=[{summary:iv.summary,at:iv.summaryAt,open:[]}];
+  iv.rounds=iv.rounds||[];
+  S.busy[key]="sum";S.err[key]=null;render();
+  const extra=roundsText(iv);
+  const maxOpen=iv.enough?0:([3,2,0][iv.rounds.length]||0);
+  const prompt=`你在帮一个人整理他对一个决定的思路。用简体中文，语气可以有一点调侃，但内容要清楚、诚实。你可以给出自己的看法和倾向，但最终决定由他做。
+
+决定资料：
+${brief(d)}
+
+问答：
+${qaText(iv.qa)}
+${extra?"\n"+extra+"\n":""}
+只输出一个 JSON 对象，不要任何其他文字或代码块标记，格式：
+{"summary":"纯文字（不要 markdown 符号），分四段，每段用【】标题开头并换行：【你真正在乎的】【每个选项的关键取舍】【你的回答里透露的担心或矛盾】【我的看法】（直说你的结论：根据他说的，你倾向哪个选项、为什么、成立的前提或要先确认的事；可以毒舌但要公道，最后一句提醒决定还是他自己做），总共 450 字以内${extra?"；要把他补充的回答整合进去":""}","open":[${maxOpen?`"还没想清楚、而且真的会影响这个决定的地方，每条写成一个具体问句，最多 ${maxOpen} 条；小细节、问过的、他补充回答已经解决的都不要列；如果他的回答已经足够做决定就给空数组"`:""}]}${maxOpen?"":"\n这是最后一次整理，open 必须是空数组。"}`;
+  try{
+    const r=await sample.json(prompt,{cache:false});
+    const summary=String(r&&r.summary||"").trim();if(!summary)throw{message:"没生出总结"};
+    const open=Array.isArray(r.open)?r.open.map(q=>String(q).trim()).filter(Boolean).slice(0,maxOpen):[];
+    const at=nowISO();
+    iv.rounds.push({summary,at,open:open.map(q=>({q}))});
+    iv.summary=summary;iv.summaryAt=at;S.busy[key]=null;
+    persist(d,iv.rounds.length>1?`Claude 重新整理思路（第 ${iv.rounds.length} 次）`:"Claude 出了思路整理");
+  }catch(e){S.busy[key]=null;S.err[key]=sampleErr(e);render()}
+}
+function ivResummary(d){
+  const iv=d.interview;const last=iv.rounds[iv.rounds.length-1];const at=nowISO();let n=0;
+  last.open.forEach((x,i)=>{const k=`op-${d.id}-${i}`;const v=(S.drafts[k]||"").trim();if(v&&!x.a){x.a=v;x.aAt=at;n++;delete S.drafts[k]}});
+  if(!n&&!last.open.some(x=>x.a)){toast("至少回答一条再重新总结");return}
+  if(n)persist(d,`回答了 ${n} 条还没想清楚的地方`);
+  ivSummary(d);
+}
+
+/* ---------- seal & review ---------- */
+async function seal(d){
+  const dr=S.drafts["seal-"+d.id];
+  if(dr.mode==="cond"){flushCondAdds(d,dr);return await sealRule(d,dr)}
+  if(!dr.optionId){toast("先选一个");return}
+  if(!dr.reason.trim()){toast("原因要写。不写原因，以后你只会骂自己");return}
+  if(!dr.expect.trim()){toast("写一下你预计会发生什么，这是以后最有用的一句");return}
+  const opt=d.options.find(o=>o.id===dr.optionId);
+  if(!await ask(`封存锦囊：选“${opt.name}”。\n封存后这份决定就不能改了，只能复盘和追加备注。确定？`))return "cancel";
+  const at=nowISO();
+  d.final={optionId:dr.optionId,reason:dr.reason.trim(),whyNot:dr.whyNot.trim(),decidedAt:at};
+  d.snapshot={expect:dr.expect.trim(),moods:[...dr.moods],moodNote:dr.moodNote.trim(),confidence:dr.confidence,reversible:dr.reversible,letter:dr.letter.trim(),at};
+  d.status="decided";
+  d.reviews=REVIEW_PLAN.map(p=>({key:p.key,label:p.label,due:addMonths(at,p.months)}));
+  delete S.drafts["seal-"+d.id];
+  S.freshSeal=d.id;
+  persist(d,`封存锦囊，选了“${opt.name}”`);
+  autoBackup("封存");ceremony("seal");
+}
+async function sealRule(d,dr){
+  const conds={};let n=0;
+  for(const o of d.options){const c=dr.conds[o.id];if(!c)continue;const items=c.items.map(i=>({id:i.id,text:i.text.trim()})).filter(i=>i.text);if(items.length){conds[o.id]={rule:c.rule,items};n++}}
+  if(!n){toast("至少给一个选项写条件");return}
+  if(!dr.checkBy){toast("要设最晚检查日期，不然这只是包装过的拖延");return}
+  if(!dr.defaultOpt){toast("要设到期都没触发时的默认选项");return}
+  if(!dr.reason.trim()){toast("写一下为什么这样定规则");return}
+  if(!dr.expect.trim()){toast("写一下你预计会发生什么，这是以后最有用的一句");return}
+  if(!await ask("封存这套规则？\n封存后规则不能改，之后只能回来打勾，记录条件有没有达到。"))return "cancel";
+  const at=nowISO();
+  d.final={mode:"cond",rule:{conds,checkBy:dr.checkBy,defaultOpt:dr.defaultOpt},reason:dr.reason.trim(),whyNot:"",decidedAt:at};
+  d.snapshot={expect:dr.expect.trim(),moods:[...dr.moods],moodNote:dr.moodNote.trim(),confidence:dr.confidence,reversible:dr.reversible,letter:dr.letter.trim(),at};
+  d.status="ruled";d.checks={};
+  delete S.drafts["seal-"+d.id];S.freshSeal=d.id;
+  persist(d,"封存规则（条件式决定）");
+  autoBackup("封存规则");ceremony("rule");
+}
+async function confirmOutcome(d,optionId,how,note){
+  const opt=d.options.find(o=>o.id===optionId);if(!opt)return;
+  const msg=how==="triggered"?`条件达到了，确认最终选“${opt.name}”？`:how==="default"?`都没触发，照规则选默认的“${opt.name}”？`:`不照规则，直接选“${opt.name}”？`;
+  if(!await ask(msg+"\n确认后会排 1 个月、6 个月、1 年的复盘。"))return;
+  const at=nowISO();
+  d.outcome={optionId,how,at,note:note||""};d.final.optionId=optionId;d.status="decided";
+  d.reviews=REVIEW_PLAN.map(p=>({key:p.key,label:p.label,due:addMonths(at,p.months)}));
+  delete S.drafts["oc-"+d.id];delete S.drafts["ocm-"+d.id];delete S.drafts["ocmn-"+d.id];
+  persist(d,`最终决定：${opt.name}（${how==="triggered"?"条件触发":how==="default"?"默认选项":"没照规则"}）`);
+  autoBackup("最终决定");ceremony("decide","选「"+opt.name+"」");
+}
+function reviewSave(d,key){
+  const r=d.reviews.find(r=>r.key===key);const k=`rv-${d.id}-${key}`;const dr=S.drafts[k];
+  if(!dr.quality||!dr.outcome){toast("决定质量和结果好坏都要打分");return}
+  if(!dr.actual.trim()){toast("写一下实际发生了什么");return}
+  r.done={at:nowISO(),actual:dr.actual.trim(),later:dr.later.trim(),quality:dr.quality,outcome:dr.outcome,note:dr.note.trim(),rule:(dr.rule||"").trim()};
+  delete S.drafts[k];
+  persist(d,`完成${r.label}的复盘`);
+  autoBackup("复盘");ceremony("review");
+}
+
+/* ---------- backup: file + Google Drive through the user's own Apps Script ---------- */
+function exportData(){return{app:"事后诸葛亮",version:1,exportedAt:nowISO(),settings:{dims:S.settings.dims},decisions:[...S.decisions.values()]}}
+function stampName(){const d=new Date();const p=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`}
+function today(){const d=new Date();const p=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`}
+const GAS_SCRIPT=key=>`// 事后诸葛亮 · 自动备份到 Google Drive
+const KEY = "${key}";
+const ROOT = "${ROOT_FOLDER_TITLE}";
+const APP = "${APP_FOLDER_TITLE}";
+const KEEP = 60; // 每日备份只留最近几天
+
+function doPost(e) {
+  const b = JSON.parse(e.postData.contents);
+  if (b.key !== KEY) return out_({ ok: false, error: "key" });
+  const f = folder_();
+  if (b.action === "ping") return out_({ ok: true });
+  if (b.action === "backup") {
+    const name = "事后诸葛亮_备份_" + b.date + ".json";
+    const old = f.getFilesByName(name); while (old.hasNext()) old.next().setTrashed(true);
+    const file = f.createFile(name, b.data, "application/json");
+    const daily = []; const it = f.getFiles();
+    while (it.hasNext()) { const x = it.next(); if (/^事后诸葛亮_备份_\\d{4}-\\d{2}-\\d{2}\\.json$/.test(x.getName())) daily.push(x); }
+    daily.sort((a, c) => c.getName().localeCompare(a.getName()));
+    daily.slice(KEEP).forEach(x => x.setTrashed(true));
+    return out_({ ok: true, url: file.getUrl() });
+  }
+  if (b.action === "list") {
+    const list = []; const it = f.getFiles();
+    while (it.hasNext()) { const x = it.next(); if (/^事后诸葛亮_备份_/.test(x.getName())) list.push({ id: x.getId(), name: x.getName(), date: x.getDateCreated().toISOString() }); }
+    list.sort((a, c) => c.date.localeCompare(a.date));
+    return out_({ ok: true, files: list.slice(0, 40) });
+  }
+  if (b.action === "get") {
+    const file = DriveApp.getFileById(b.id);
+    const ps = file.getParents(); let inside = false; while (ps.hasNext()) if (ps.next().getId() === f.getId()) inside = true;
+    if (!inside) return out_({ ok: false, error: "folder" });
+    return out_({ ok: true, data: file.getBlob().getDataAsString() });
+  }
+  return out_({ ok: false, error: "action" });
+}
+function sub_(parent, name) { const it = parent ? parent.getFoldersByName(name) : DriveApp.getFoldersByName(name); return it.hasNext() ? it.next() : (parent ? parent.createFolder(name) : DriveApp.createFolder(name)); }
+function folder_() { return sub_(sub_(null, ROOT), APP); }
+function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+`;
+function gasKey(){if(S.settings.gasKey)return S.settings.gasKey;const a=crypto.getRandomValues(new Uint8Array(18));S.settings.gasKey=[...a].map(x=>"abcdefghijkmnpqrstuvwxyz23456789"[x%32]).join("");persistSettings();return S.settings.gasKey}
+async function gasCall(body,url){
+  const g=url?{url,key:gasKey()}:S.settings.gas;if(!g)throw{code:"no_gas"};
+  const r=await fetch(g.url,{method:"POST",body:JSON.stringify(Object.assign({},body,{key:g.key})),headers:{"Content-Type":"text/plain;charset=utf-8"},redirect:"follow"});
+  const t=await r.text();let j;try{j=JSON.parse(t)}catch(e){throw{code:"bad_reply"}}
+  if(!j.ok)throw{code:j.error||"fail"};return j;
+}
+function gasErr(e){const c=e&&e.code;return c==="key"?"脚本的钥匙对不上：按「复制脚本」重新贴一次，再部署新版本":c==="bad_reply"?"那个网址不是这个脚本的网页应用网址，或者部署时「谁可以访问」没选「任何人」":c==="no_gas"?"还没设定自动备份":navigator.onLine?"备份没成功，等一下再试":"没网络，等有网络再试"}
+async function gasConnect(){
+  const url=(S.drafts.gasurl||"").trim();
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(url)){S.err.backup="网址要像 https://script.google.com/macros/s/…/exec";render();return}
+  S.busy.backup="test";S.err.backup=null;render();
+  try{await gasCall({action:"ping"},url);S.settings.gas={url,key:gasKey()};persistSettings();delete S.drafts.gasurl;S.busy.backup=null;toast("连接好了");backupNow("首次");return}
+  catch(e){S.err.backup=gasErr(e)}
+  S.busy.backup=null;render();
+}
+async function backupNow(label,silent){
+  if(!S.settings.gas){if(!silent){S.err.backup=gasErr({code:"no_gas"});render()}return}
+  if(S.busy.backup)return;
+  S.busy.backup="backup";S.err.backup=null;if(!silent)render();
+  try{
+    const j=await gasCall({action:"backup",date:today(),data:JSON.stringify(exportData())});
+    S.settings.lastBackup={at:nowISO(),url:j.url||"",day:today()};persistSettings();
+    if(!silent||label!=="每日")toast(silent?"已自动备份到 Google Drive":"已备份到 Google Drive");
+  }catch(e){if(!silent)S.err.backup=gasErr(e)}
+  S.busy.backup=null;render();
+}
+function autoBackup(label){if(S.settings.gas)backupNow(label,true)}
+function dailyBackup(){const lb=S.settings.lastBackup;if(S.settings.gas&&S.decisions.size&&!(lb&&(lb.day||String(lb.at).slice(0,10))===today()))setTimeout(()=>backupNow("每日",true),1500)}
+async function listBackups(){
+  S.busy.backup="list";S.err.backup=null;render();
+  try{S.restoreList=(await gasCall({action:"list"})).files||[]}catch(e){S.err.backup=gasErr(e)}
+  S.busy.backup=null;render();
+}
+async function importData(data,from){
+  if(!data||data.app!=="事后诸葛亮"||!Array.isArray(data.decisions))throw{message:"这不是事后诸葛亮的备份文件"};
+  const n=data.decisions.filter(x=>x&&x.id).length;
+  if(!await ask(`${from}里有 ${n} 个决定。导入后，同一个决定会被备份的版本覆盖，其他的不动。继续？`))return false;
+  for(const dd of data.decisions){if(dd&&dd.id){S.decisions.set(dd.id,dd);queueSave(dd.id)}}
+  const st=data.settings||{};
+  let setChanged=false;
+  if(Array.isArray(st.dims)&&st.dims.length){S.settings.dims=st.dims;setChanged=true}
+  if(st.lock&&st.lock.hash&&!(S.settings.lock&&S.settings.lock.hash)){S.settings.lock=st.lock;S.unlocked=true;setChanged=true}
+  if(setChanged)persistSettings();
+  toast(`已导入 ${n} 个决定`);render();return true;
+}
+async function restore(fileId){
+  S.busy.backup="restore";S.err.backup=null;render();
+  try{const j=await gasCall({action:"get",id:fileId});S.busy.backup=null;if(await importData(JSON.parse(j.data),"这个备份"))S.restoreList=null}
+  catch(e){S.err.backup=e&&e.message?e.message:gasErr(e)}
+  S.busy.backup=null;render();
+}
+async function downloadLocal(){
+  const name=`事后诸葛亮_备份_${stampName()}.json`;const txt=JSON.stringify(exportData(),null,1);
+  try{const f=new File([txt],name,{type:"application/json"});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});return}}catch(e){if(e&&e.name==="AbortError")return}
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:"application/json"}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);
+}
+document.getElementById("importFile").addEventListener("change",async e=>{
+  const f=e.target.files&&e.target.files[0];e.target.value="";if(!f)return;
+  try{await importData(JSON.parse(await f.text()),"这个文件")}catch(err){toast(err&&err.message&&/事后诸葛亮/.test(err.message)?err.message:"读不了这个文件，不是事后诸葛亮的备份")}
+});
+
+/* ---------- password lock ---------- */
+const b64=buf=>btoa(String.fromCharCode(...new Uint8Array(buf)));
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function pinHash(pin,salt){const k=await crypto.subtle.importKey("raw",new TextEncoder().encode(pin),"PBKDF2",false,["deriveBits"]);const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:unb64(salt),iterations:150000,hash:"SHA-256"},k,256);return b64(bits)}
+async function legacyHash(pw,salt){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(salt+"|"+pw));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+function isLocked(){return !!(S.settings.lock&&S.settings.lock.hash)&&!S.unlocked}
+const BIOK="shzgl-bio";
+const bioId=()=>{try{return localStorage.getItem(BIOK)}catch(e){return null}};
+let lkMode="unlock",lkBuf="",lkFirst="",lkAfterVerify=null,lkFails=0,lkWaitUntil=0;
+const L$=id=>document.getElementById(id);
+const isCheck=()=>lkMode==="unlock"||lkMode==="verify";
+const legacy=()=>!!(S.settings.lock&&!S.settings.lock.len);
+function lkDraw(){const n=isCheck()?(legacy()?Math.max(4,lkBuf.length):S.settings.lock.len):Math.max(4,Math.min(6,lkBuf.length+(lkBuf.length<6?1:0)));L$("lkDots").innerHTML=Array.from({length:n},(_,i)=>`<i class="${i<lkBuf.length?"on":""}"></i>`).join("")}
+function showLock(mode){
+  lkMode=mode;lkBuf="";if(mode==="set1")lkFirst="";L$("lkMsg").textContent="";L$("lkHelp").hidden=true;
+  L$("lkTitle").textContent=mode==="unlock"?"输入密码":mode==="verify"?"先输入现在的密码":mode==="set2"?"再输入一次":"设定 4–6 位数字密码";
+  L$("lkCancel").hidden=mode==="unlock";L$("lkForgot").hidden=!isCheck();
+  const bio=L$("lkBio");
+  if(isCheck()&&!legacy()){bio.textContent="Face ID";bio.style.visibility=bioId()?"visible":"hidden"}
+  else{bio.textContent="确定";bio.style.visibility="visible"}
+  if(mode==="unlock")document.body.classList.add("locked");
+  L$("lock").hidden=false;lkDraw();
+  if(mode==="unlock"&&bioId()&&!legacy())setTimeout(bioUnlock,300);
+}
+function hideLock(){L$("lock").hidden=true;document.body.classList.remove("locked")}
+function lkFail(t){L$("lkMsg").textContent=t;L$("lock").classList.add("shake");setTimeout(()=>L$("lock").classList.remove("shake"),400);lkBuf="";lkDraw()}
+function lkPassed(){
+  lkFails=0;
+  if(lkMode==="unlock"){S.unlocked=true;render();const el=L$("lock");el.classList.add("opening");setTimeout(()=>{el.classList.remove("opening");hideLock()},reduceMotion()?0:700)}
+  else{const f=lkAfterVerify;lkAfterVerify=null;if(f)f()}
+}
+function lkWrong(){
+  lkFails++;
+  if(lkFails>=5){lkFails=0;lkWaitUntil=Date.now()+30000;lkFail("错太多次了，等 30 秒再试");return}
+  lkFail("密码不对");
+}
+async function lkCheck(){
+  const L=S.settings.lock;if(!L)return;
+  if(Date.now()<lkWaitUntil){lkFail("错太多次了，等一下再试");return}
+  if(legacy()){
+    if(await legacyHash(lkBuf,L.salt)!==L.hash){lkWrong();return}
+    if(/^\d{4,6}$/.test(lkBuf)){const salt=b64(crypto.getRandomValues(new Uint8Array(16)));S.settings.lock=Object.assign({},L,{salt,hash:await pinHash(lkBuf,salt),len:lkBuf.length,after:L.after!=null?L.after:5,v:2});persistSettings()}
+    lkPassed();return;
+  }
+  if(await pinHash(lkBuf,L.salt)!==L.hash){lkWrong();return}
+  lkPassed();
+}
+async function lkInput(n){
+  if(n==="B"){lkBuf=lkBuf.slice(0,-1);lkDraw();return}
+  if(lkBuf.length>=(isCheck()&&legacy()?32:6))return;
+  lkBuf+=n;L$("lkMsg").textContent="";lkDraw();
+  if(isCheck()&&!legacy()&&lkBuf.length===S.settings.lock.len)await lkCheck();
+}
+async function lkOk(){
+  if(isCheck()){if(legacy()&&lkBuf)await lkCheck();return}
+  if(lkBuf.length<4){lkFail("至少 4 位");return}
+  if(lkMode==="set1"){lkFirst=lkBuf;showLock("set2");return}
+  if(lkBuf!==lkFirst){showLock("set1");lkFail("两次不一样，重新设定");return}
+  const salt=b64(crypto.getRandomValues(new Uint8Array(16)));
+  const old=S.settings.lock;
+  S.settings.lock={salt,hash:await pinHash(lkBuf,salt),len:lkBuf.length,after:old&&old.after!=null?old.after:5,at:nowISO(),v:2};
+  persistSettings();S.unlocked=true;hideLock();render();toast("密码设好了");
+}
+L$("lkPad").addEventListener("click",e=>{const b=e.target.closest("[data-n]");if(b)lkInput(b.dataset.n)});
+L$("lkBio").addEventListener("click",()=>{if(isCheck()&&!legacy())bioUnlock();else lkOk()});
+L$("lkCancel").addEventListener("click",()=>{lkAfterVerify=null;hideLock()});
+L$("lkForgot").addEventListener("click",()=>{L$("lkHelp").hidden=!L$("lkHelp").hidden});
+document.addEventListener("keydown",e=>{if(L$("lock").hidden)return;if(/^[0-9]$/.test(e.key)){e.preventDefault();lkInput(e.key)}else if(e.key==="Backspace"){e.preventDefault();lkInput("B")}else if(e.key==="Enter"){e.preventDefault();lkOk()}});
+async function bioAvailable(){try{return !!(window.PublicKeyCredential&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())}catch(e){return false}}
+async function bioRegister(){
+  bioBusy=true;
+  try{
+    const cred=await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:"事后诸葛亮"},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:"shzgl",displayName:"事后诸葛亮"},pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],authenticatorSelection:{authenticatorAttachment:"platform",userVerification:"required",residentKey:"discouraged"},timeout:60000}});
+    localStorage.setItem(BIOK,b64(cred.rawId));bioBusy=false;toast("这台设备可以用 Face ID / 指纹解锁了");render();
+  }catch(e){bioBusy=false;toast(e&&e.name==="NotAllowedError"?"取消了，或这个页面不允许用 Face ID":"这台设备或这个页面不支持 Face ID / 指纹")}
+}
+async function bioUnlock(){
+  const id=bioId();if(!id)return;
+  try{await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:"public-key",id:unb64(id),transports:["internal"]}],userVerification:"required",timeout:60000}});lkPassed()}
+  catch(e){L$("lkMsg").textContent="Face ID / 指纹没成功，请输入密码"}
+}
+let bioCan=null;bioAvailable().then(v=>{bioCan=v});
+function viewLockSettings(){
+  const L=S.settings.lock;
+  if(!L||!L.hash)return `<div class="lockset"><p class="small muted" style="margin-top:0">设定一组 4–6 位数字密码，打开 app 前要先输入。手机、iPad 用同一组密码，每台设备可以再各自开 Face ID / 指纹。</p><button class="btn" data-act="lock-on">设定密码</button></div>`;
+  const bio=!!bioId();const after=lockAfter();
+  return `<div class="lockset"><p style="margin-top:0">密码锁已开启${L.len?`，${L.len} 位数字`:""}。</p>
+  ${!L.len?`<p class="note">你现在用的是旧版密码。下次在锁屏用数字键盘输入后，会自动升级成新版。如果旧密码里有字母，请按“改密码”换成数字密码。</p>`:""}
+  <p class="small muted">切到别的 app、回主画面、锁屏，或点到这个页面外面，都会马上上锁。所有设备都一样。</p>
+  <p class="small muted">${bio?"这台设备已经可以用 Face ID / 指纹解锁。":bioCan?"这台设备支持 Face ID / 指纹，可以开启。":"这台设备或这个页面不支持 Face ID / 指纹，只能用密码。"}</p>
+  <div class="actions">${!bio&&bioCan&&L.len?`<button class="btn small" data-act="bio-on">开启 Face ID / 指纹</button>`:""}${bio?`<button class="btn ghost small" data-act="bio-off">这台设备不用 Face ID</button>`:""}<button class="btn ghost small" data-act="lock-now">现在就上锁</button><button class="btn ghost small" data-act="lock-change">改密码</button><button class="btn danger small" data-act="lock-off">关掉密码锁</button></div></div>`;
+}
+let bioBusy=false;
+function lockAfter(){return 0}
+function lockNow(){S.unlocked=false;render()}
+let hiddenAt=0;
+document.addEventListener("visibilitychange",()=>{
+  const L=S.settings.lock;const on=!!(L&&L.hash);
+  if(document.hidden){hiddenAt=Date.now();if(on&&S.unlocked&&lockAfter()===0)lockNow();return}
+  if(!on||!hiddenAt||!S.unlocked)return;
+  if(Date.now()-hiddenAt>=lockAfter()*60000)lockNow();
+});
+window.addEventListener("pagehide",()=>{const L=S.settings.lock;if(L&&L.hash&&S.unlocked&&lockAfter()===0)lockNow()});
+window.addEventListener("blur",()=>{setTimeout(()=>{const L=S.settings.lock;if(L&&L.hash&&S.unlocked&&!bioBusy&&!document.hasFocus())lockNow()},800)});
+document.getElementById("lockBtn").addEventListener("click",()=>{S.unlocked=false;location.hash="";render()});
+
+/* ---------- in-app confirm ---------- */
+function ask(msg){return new Promise(res=>{const el=document.getElementById("ask");document.getElementById("askMsg").textContent=msg;el.hidden=false;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");
+  const done=v=>{el.hidden=true;yes.onclick=no.onclick=el.onclick=null;document.removeEventListener("keydown",kd);res(v)};
+  const yes=document.getElementById("askYes"),no=document.getElementById("askNo");
+  const kd=e=>{if(e.key==="Escape")done(false);else if(e.key==="Enter"){e.preventDefault();done(true)}};
+  yes.onclick=()=>done(true);no.onclick=()=>done(false);el.onclick=e=>{if(e.target===el)done(false)};document.addEventListener("keydown",kd);setTimeout(()=>yes.focus(),30)})}
+
+/* ---------- ceremony ---------- */
+function reduceMotion(){return window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches}
+let cereT=0;
+function ceremony(kind,sub){
+  const C={seal:["封","锦囊已封存","以后想骂自己，先打开看看"],rule:["计","妙计已封存","时机一到，照计行事"],decide:["定","尘埃落定","一个月、半年、一年后回来复盘"],trigger:["机","时机已到","去确认最终决定"],review:["省","复盘完成","吾日三省吾身"]}[kind];if(!C)return;
+  const el=document.getElementById("cere");
+  document.getElementById("cereS").textContent=C[0];document.getElementById("cereT").textContent=C[1];document.getElementById("cereSub").textContent=sub?sub+"。"+C[2]:C[2];
+  el.hidden=false;el.classList.remove("run","out");void el.offsetWidth;el.classList.add("run");
+  if(!reduceMotion()&&navigator.vibrate)setTimeout(()=>{try{navigator.vibrate(35)}catch(e){}},1000);
+  clearTimeout(cereT);cereT=setTimeout(cereClose,reduceMotion()?1400:3000);
+}
+function cereClose(){const el=document.getElementById("cere");if(el.hidden)return;clearTimeout(cereT);el.classList.add("out");setTimeout(()=>{el.hidden=true;el.classList.remove("run","out")},450)}
+document.getElementById("cere").addEventListener("click",cereClose);
+function setBarH(){const b=document.querySelector(".bar");if(b)document.documentElement.style.setProperty("--barh",b.offsetHeight+"px")}
+window.addEventListener("resize",setBarH);setTimeout(setBarH,0);
+
+/* ---------- boot ---------- */
+window.addEventListener("hashchange",()=>{S.restoreList=null;needRender=false;const ae=document.activeElement;if(ae&&ae.blur)ae.blur();render();window.scrollTo(0,0)});
+render();
+initStore();
+getSample();
+})();
+</script>
+</body>
+</html>
