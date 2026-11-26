@@ -541,6 +541,7 @@ details.gasset summary{cursor:pointer;color:var(--indigo);font-weight:600}
       <p class="auth-msg" id="authMsg" role="alert"></p>
       <button class="btn vermilion" id="authGo" type="submit">登入</button>
       <button class="btn ghost" id="authSwitch" type="button">第一次用？注册账号</button>
+      <button class="link small" id="authCfg" type="button" style="margin-top:4px">改 Supabase 网址和 key</button>
     </form>
   </div>
 </section>
@@ -792,7 +793,8 @@ function showAuth(mode){
   $$("cfgFields").hidden=!setup;$$("loginFields").hidden=setup;
   if(setup){$$("cfgUrl").value=CFG.url||DEFAULT_SB_URL;$$("cfgKey").value=CFG.key||""}
   $$("authSub").textContent=setup?"先填事后诸葛亮那个 Supabase 项目的网址和 Publishable key。每台设备只要填一次。":"登入后，手机和 iPad 的决定会自动同步。第一次用先按「注册账号」。";
-  $$("authSwitch").hidden=setup;
+  $$("authSwitch").hidden=setup;$$("authCfg").hidden=setup;
+  $$("authCfg").onclick=()=>{try{localStorage.removeItem("shzgl.cfg")}catch(e){}showAuth("setup")};
   let signUp=false;
   const paint=()=>{$$("authGo").textContent=setup?"保存":signUp?"注册":"登入";$$("authSwitch").textContent=signUp?"已经有账号？登入":"第一次用？注册账号";$$("authPass").autocomplete=signUp?"new-password":"current-password"};
   paint();
@@ -801,9 +803,11 @@ function showAuth(mode){
   $$("authForm").onsubmit=async e=>{
     e.preventDefault();
     if(setup){
-      const url=$$("cfgUrl").value.trim().replace(/\/+$/,""),key=$$("cfgKey").value.trim();
+      const url=$$("cfgUrl").value.trim().replace(/\/+$/,"").replace(/\/rest\/v1$/,""),key=$$("cfgKey").value.replace(/\s+/g,"");
       if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)||key.length<20){msg("网址要像 https://xxxx.supabase.co，key 是一长串字");return}
       if(/^sb_secret_/i.test(key)){msg("这个是 secret key，千万不能放进网页。要用 Publishable key");return}
+      msg("检查中…",true);
+      try{const r=await fetch(url+"/auth/v1/settings",{headers:{apikey:key}});if(r.status===401||r.status===403){msg("这组网址和 key 对不上：key 要从同一个项目复制，而且要按复制按钮整条复制，不要手抄");return}}catch(e){msg("连不上这个网址，检查一下有没有打错");return}
       lsSet("shzgl.cfg",{url,key});location.reload();return;
     }
     const email=$$("authEmail").value.trim(),password=$$("authPass").value;
@@ -816,6 +820,7 @@ function showAuth(mode){
       startSync(r.data.session.user);
     }catch(err){
       const t=String(err&&err.message||"");
+      if(/invalid api key|No API key/i.test(t)){msg("Supabase 的 key 不对，按下面「改 Supabase 网址和 key」重新贴一次");return}
       msg(/Invalid login/i.test(t)?"电邮或密码不对":/not confirmed/i.test(t)?"电邮还没确认，去邮箱按确认链接":/already registered/i.test(t)?"这个电邮注册过了，直接登入":/Password should/i.test(t)?"密码至少 6 个字":/fetch|network/i.test(t)?"连不上网络":"没成功："+t);
     }finally{$$("authGo").disabled=false}
   };
