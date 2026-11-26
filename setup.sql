@@ -1,5 +1,4 @@
--- 事后诸葛亮：在 Supabase（书斋那个项目）的 SQL Editor 里整段贴上，按 Run，只要跑一次。
--- 不会动到书斋的资料。
+-- 事后诸葛亮：在它自己的 Supabase 项目里打开 SQL Editor，整段贴上，按 Run，只要跑一次。
 
 create table if not exists public.decisions (
   user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
