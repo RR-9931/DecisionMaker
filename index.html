@@ -687,9 +687,10 @@ async function flush(id){
     }
     saveVer();
     if(!p.dirty){dirty.delete(id);saveDirty()}
-    setSync("ok");syncWarned=false;
+    S.syncErr="";setSync("ok");syncWarned=false;
   }catch(e){
-    setSync(navigator.onLine?"err":"offline");
+    S.syncErr=errText(e);
+    setSync(isNoTable(e)?"nosql":navigator.onLine?"err":"offline");
     if(!syncWarned&&navigator.onLine){syncWarned=true;toast("同步没成功，改动先存在这台设备，有网络会自动补上")}
   }
   p.inflight=false;
@@ -698,7 +699,7 @@ async function flush(id){
 function deleteDecision(id){S.decisions.delete(id);queueSave(id);}
 function pushDirty(){if(S.mode!=="db")return;for(const id of dirty){if(!pending.has(id)){pending.set(id,{timer:null,inflight:false,dirty:true});flush(id)}}}
 
-function setSync(st){if(S.sync===st)return;S.sync=st;const el=document.getElementById("syncLine");if(el)el.outerHTML=syncLine()}
+function setSync(st){if(st==="ok")S.syncErr="";if(S.sync===st)return;S.sync=st;const el=document.getElementById("syncLine");if(el)el.outerHTML=syncLine()}
 function applyRow(id,data){
   if(!data)return;
   if(id==="_settings"){Object.assign(S.settings,data);S.settings.lock=data.lock||null;return}
@@ -728,9 +729,11 @@ async function pull(){
   pushDirty();
   if(!pulledOnce){pulledOnce=true;dailyBackup()}
 }
+const errText=e=>[e&&e.code,e&&e.message,e&&e.details,e&&e.hint].filter(Boolean).join(" · ").slice(0,300)||String(e);
+const isNoTable=e=>/relation|does not exist|schema cache|not find the table|PGRST205|42P01/i.test(errText(e));
 const repull=()=>pulling||(pulling=pull().catch(e=>{
-  const m=String(e&&e.message||"");
-  setSync(/relation|does not exist|schema cache|not find the table/i.test(m)?"nosql":navigator.onLine?"err":"offline");
+  S.syncErr=errText(e);
+  setSync(isNoTable(e)?"nosql":navigator.onLine?"err":"offline");
 }).finally(()=>{pulling=null}));
 function onRow(p){
   if(p.eventType==="DELETE"){
@@ -1331,6 +1334,7 @@ function viewBackup(){
   let h=`<div class="dhead"><h1>设置</h1></div>
   <section class="step"><div class="step-h"><h2>账号和同步</h2></div>
   <p style="margin-top:0">${syncLine()}</p>
+  ${S.syncErr&&S.sync!=="ok"?`<p class="small" style="color:var(--con);word-break:break-all">错误内容：${esc(S.syncErr)}</p>`:""}
   ${S.email?`<p class="small muted">登入的账号：${esc(S.email)}</p>`:""}
   <div class="actions">${S.mode==="db"?`<button class="btn ghost small" data-act="sync-now">现在同步</button><button class="btn ghost small" data-act="signout">登出</button>`:""}<button class="link small" data-act="cfg-reset">更换 Supabase 设定</button></div></section>
   <section class="step"><div class="step-h"><h2>Google Drive 自动备份</h2></div>`;
