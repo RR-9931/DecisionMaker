@@ -1,7 +1,7 @@
 /* 事后诸葛亮 service worker: lets the app open with no network.
    The page is fetched fresh when online; libraries and fonts are kept once downloaded.
    Only caches named shzgl-* are touched, so 书斋 on the same site keeps its own. */
-const VERSION = 'shzgl-v1';
+const VERSION = 'shzgl-v2';
 const SHELL = ['./', './index.html', './config.js', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 const LIBS = ['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.5/dist/umd/supabase.js'];
 self.addEventListener('install', e => {

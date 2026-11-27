@@ -565,7 +565,7 @@ html{accent-color:var(--seal)}
 /* bottom tab bar, same layout as 钱簿 and 书斋 */
 .bar .bar-in{min-height:52px}
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--paper) 90%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
-.tb-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end}
+.tb-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);align-items:end}
 .tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 8px;color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;position:relative;transition:color .2s}
 .tabbar svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
 .tabbar a[aria-current="page"]{color:var(--seal)}
@@ -585,6 +585,61 @@ body.locked .tabbar{visibility:hidden}
 .tip{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:10px 14px!important;margin:8px 0!important;color:var(--ink-soft)!important;font-size:14px!important;line-height:1.65}
 ol.tip{padding-left:2em!important}
 @media (prefers-reduced-motion:no-preference){.tip.show{animation:rise .25s var(--ease) both}}
+/* ---- 外观切换 / 模板 / 统计 ---- */
+.themeq{background:none;border:1px solid var(--line);border-radius:999px;width:34px;height:30px;padding:0;font-size:15px;line-height:1}
+.seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:4px}
+.seg3 button{border:0;background:none;border-radius:10px;padding:10px 4px;font-size:14px;font-weight:600;color:var(--ink-soft);transition:background .2s,color .2s}
+.seg3 button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.tpls{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;margin-bottom:6px}
+.tpl{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:10px 4px;font-size:13px;font-weight:600;color:var(--ink);transition:transform .15s,border-color .2s}
+.tpl span{font-size:22px}
+.tpl:active{transform:scale(.95)}
+.tpl[aria-pressed="true"]{border-color:var(--seal);background:color-mix(in srgb,var(--seal) 8%,var(--card));box-shadow:0 0 0 1px var(--seal) inset}
+.tpltips{background:color-mix(in srgb,var(--gold) 10%,var(--card));border:1px solid color-mix(in srgb,var(--gold) 35%,var(--line));border-radius:14px;padding:10px 14px;margin:12px 0 4px}
+.tpltips summary{cursor:pointer;font-weight:700;font-size:14px}
+.tpltips ul{margin:8px 0 0;padding-left:20px;font-size:14px;line-height:1.7;color:var(--ink)}
+.verdict{border-radius:16px;padding:14px 16px;margin:4px 0 14px;border:1px solid var(--line)}
+.verdict.con{background:var(--con-soft);border-color:color-mix(in srgb,var(--con) 35%,transparent)}
+.verdict.pro{background:var(--pro-soft);border-color:color-mix(in srgb,var(--pro) 35%,transparent)}
+.verdict b{font-family:var(--serif);font-size:20px}.verdict.con b{color:var(--con)}.verdict.pro b{color:var(--pro)}
+.verdict p{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.calib{display:flex;flex-direction:column;gap:12px}
+.cb{display:grid;grid-template-columns:76px 1fr;gap:10px;align-items:center}
+.cbl{font-weight:700;font-size:14px;display:flex;flex-direction:column}.cbl small{font-weight:400;color:var(--muted);font-size:12px}
+.cb.empty .cbn{color:var(--muted);font-size:13px}
+.cbars{display:flex;flex-direction:column;gap:4px}
+.cbar{position:relative;height:22px;border-radius:7px;background:var(--sheet);overflow:hidden}
+.cbar i{position:absolute;left:0;top:0;bottom:0;border-radius:7px;transform-origin:left;animation:grow .8s cubic-bezier(.2,.9,.3,1.15) both}
+.cbar i.exp{background:color-mix(in srgb,var(--indigo) 30%,transparent)}
+.cbar i.act{background:color-mix(in srgb,var(--pro) 45%,transparent)}
+.cbar span{position:relative;font-size:12px;font-weight:700;padding-left:8px;line-height:22px;color:var(--ink)}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.quad4{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quad4 .q{border-radius:14px;padding:12px;font-size:13px;line-height:1.4;color:var(--ink);border:1px solid var(--line)}
+.quad4 .q b{display:block;font-size:26px;font-family:var(--serif)}
+.quad4 .gg{background:var(--pro-soft)}.quad4 .bb{background:var(--con-soft)}
+.quad4 .gb{background:var(--indigo-soft)}.quad4 .bg{background:color-mix(in srgb,var(--gold) 16%,var(--card))}
+.regtop{display:flex;align-items:center;gap:16px;margin-bottom:6px}
+.regtop>div:first-child{display:flex;flex-direction:column;align-items:center}
+.regtop b{font-size:38px;font-family:var(--serif);line-height:1}.regtop small{color:var(--muted);font-size:12px}
+.regtop .pro{color:var(--pro);font-weight:700}.regtop .con{color:var(--con);font-weight:700}
+.regchart{width:100%;height:auto;margin-top:6px}
+.regchart .grid{stroke:var(--line);stroke-dasharray:3 4}
+.regchart text{font-size:10px;fill:var(--muted)}
+.regchart .line{fill:none;stroke:var(--seal);stroke-width:2.5;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s ease forwards}
+.regchart .dot{fill:var(--card);stroke:var(--seal);stroke-width:2.5}
+.regchart .dot.hi{fill:var(--con);stroke:var(--con)}.regchart .dot.lo{fill:var(--pro);stroke:var(--pro)}
+@keyframes draw{to{stroke-dashoffset:0}}
+.regstage{display:flex;gap:8px;margin-top:10px}
+.regstage div{flex:1;background:var(--sheet);border-radius:12px;padding:8px;text-align:center;display:flex;flex-direction:column}
+.regstage small{color:var(--muted);font-size:12px}.regstage b{font-size:20px;font-family:var(--serif)}
+.regrow{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line);margin-bottom:6px;color:var(--ink);text-decoration:none}
+.regrow b.con{color:var(--con);font-size:18px}
+.rate.r11{gap:4px}.rate.r11 .pip{width:30px;height:32px}
+.rate.r11 .pip[aria-pressed="true"]{background:var(--con);border-color:var(--con);color:#fff}
+.rate.r11 .pip.lo[aria-pressed="true"]{background:var(--pro);border-color:var(--pro)}
+.rgl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);max-width:370px;margin-top:2px}
+@media (prefers-reduced-motion:reduce){.cbar i,.regchart .line{animation:none!important;stroke-dashoffset:0}}
 </style>
 </head>
 <body>
@@ -612,12 +667,14 @@ ol.tip{padding-left:2em!important}
 <input type="file" id="importFile" accept=".json,application/json" hidden>
 <header class="bar"><div class="bar-in">
   <a class="logo" href="#">事后诸葛亮</a>
+  <button class="themeq" id="themeQuick" aria-label="换颜色">🌙</button>
   <button class="lockbtn" id="lockBtn" hidden>上锁</button>
 </div></header>
 <main id="app"><p class="muted">载入中…</p></main>
 <nav class="tabbar" aria-label="主选单"><div class="tb-in">
   <a href="#" data-nav="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 4.5Q7 2.8 8.6 2.2Q10 3.3 12 2.6Q14 3.3 15.4 2.2Q17 2.8 15.5 4.5"/><path d="M8.6 6.2Q3.6 11 4.6 16.8Q5.6 21.4 12 21.6Q18.4 21.4 19.4 16.8Q20.4 11 15.4 6.2Z"/><path d="M8 5.2Q12 7.2 16 5.2"/></svg><span>锦囊</span></a>
   <a href="#new" data-nav="new" class="tb-new"><span class="tb-plus" aria-hidden="true">＋</span><span>新决定</span></a>
+  <a href="#stats" data-nav="stats"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/></svg><span>统计</span></a>
   <a href="#backup" data-nav="backup"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8M18.5 18.5l-1.8-1.8M7.3 7.3L5.5 5.5"/></svg><span>设置</span></a>
 </div></nav>
 <div id="lock" hidden role="dialog" aria-modal="true" aria-label="输入密码">
@@ -907,8 +964,142 @@ async function signOut(){
 /* ---------- capabilities ---------- */
 async function getSample(){S.sample=null;return null}
 
+
+/* ---------- 外观：自动 / 浅色 / 深色（跟我的钱簿共用 mm-theme，同一个网址下的 app 一起变） ---------- */
+function themePref(){try{const t=localStorage.getItem("mm-theme");return t==="light"||t==="dark"?t:"auto"}catch(e){return"auto"}}
+function themeNow(){const p=themePref();if(p!=="auto")return p;try{return matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}catch(e){return"light"}}
+function applyTheme(){
+  const p=themePref(),H=document.documentElement;
+  if(p==="auto")delete H.dataset.theme;else H.dataset.theme=p;
+  const now=themeNow();document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.content=now==="dark"?"#0F1426":"#ECEFF4");
+  const b=document.getElementById("themeQuick");if(b){b.textContent=now==="dark"?"☀️":"🌙";b.setAttribute("aria-label",now==="dark"?"换浅色":"换深色")}
+}
+function setThemePref(p){try{if(p==="auto")localStorage.removeItem("mm-theme");else localStorage.setItem("mm-theme",p)}catch(e){}applyTheme()}
+applyTheme();
+try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",applyTheme)}catch(e){}
+window.addEventListener("storage",e=>{if(e.key==="mm-theme")applyTheme()});
+document.getElementById("themeQuick").addEventListener("click",()=>{setThemePref(themeNow()==="dark"?"light":"dark");toast(themeNow()==="dark"?"深色":"浅色")});
+function themeSection(){
+  const p=themePref();
+  return `<section class="step"><div class="step-h"><h2>外观</h2></div>
+  <div class="seg3">${[["auto","🌓 跟手机"],["light","☀️ 浅色"],["dark","🌙 深色"]].map(([k,l])=>`<button data-act="theme" data-v="${k}" aria-pressed="${p===k}">${l}</button>`).join("")}</div>
+  <p class="muted small tip" style="margin:8px 0 0">跟我的钱簿、总入口用同一个设定，在一个 app 换了，其他的也会跟着换。</p></section>`;
+}
+
+/* ---------- 决策模板 ---------- */
+const TEMPLATES=[
+  {k:"job",e:"💼",n:"换工作",title:"要不要换去 ___",ph:"例如：要不要换去新加坡那份工作",opts:["留在现在的公司","换去新工作"],dims:["importance","duration"],
+   ctx:"现在的工作：\n新的机会：\n我最在乎的是：\n我最怕的是：",
+   tips:["实际到手差多少（扣税、EPF/CPF、房租、生活费都算进去）","通勤时间和每天的精力","3 年后的履历：学得到东西吗","老板和团队是什么样的人","合约多长、稳不稳定","离家多远、家人怎么看","notice period 多长、要不要赔钱"]},
+  {k:"buy",e:"🛒",n:"买大件",title:"要不要买 ___",ph:"例如：要不要换新车",opts:["买","不买 / 再等等"],dims:["importance","duration"],
+   ctx:"要买什么、多少钱：\n为什么想买：\n不买会怎样：",
+   tips:["占月薪 / 存款的几成","会不会拖垮今年的存款目标","多久用一次，算下来每次多少钱","有没有更便宜的替代品","保养、保险、维修这些后续费用","是需要还是想要：等 48 小时还想买吗"]},
+  {k:"study",e:"🎓",n:"进修 / 读书",title:"要不要去读 ___",ph:"例如：要不要读 PhD",opts:["去读","不读"],dims:["importance","duration","probability"],
+   ctx:"想读什么、在哪里读：\n读完想做什么：\n钱和时间怎么安排：",
+   tips:["学费 + 读书期间少赚的钱（机会成本）","读完薪水 / 职位真的会变吗","要读几年，能不能边做边读","有没有别的路也能到同一个目标","奖学金、补助、公司资助"]},
+  {k:"move",e:"🏠",n:"搬家 / 换城市",title:"要不要搬去 ___",ph:"例如：要不要搬去 KL",opts:["留在这里","搬过去"],dims:["importance","duration","scope"],
+   ctx:"现在住哪里：\n想搬去哪里、为什么：\n会影响到谁：",
+   tips:["房租 / 房价和生活费差多少","离家人朋友多远","那边的工作机会","交通、医疗、生活方不方便","一个人能不能适应"]},
+  {k:"invest",e:"📈",n:"投资 / 理财",title:"要不要投 ___",ph:"例如：要不要把存款放进某个基金",opts:["投","不投"],dims:["importance","probability"],
+   ctx:"投什么、投多少：\n为什么现在想投：\n这笔钱原本打算做什么：",
+   tips:["最坏情况会亏多少，亏得起吗","钱要锁多久，急用的时候拿得出来吗","我真的看得懂这个东西吗","手续费和税","是不是怕错过（FOMO）才想投"]},
+  {k:"people",e:"🤝",n:"人际 / 感情",title:"要不要 ___",ph:"例如：要不要跟某人摊牌",opts:["维持现状","改变 / 说出来"],dims:["importance","duration"],
+   ctx:"发生了什么事：\n我想要的结果：\n对方可能怎么想：",
+   tips:["站在对方的角度看是怎样的","长期来说会更好还是更累","我有没有把自己的需要讲清楚","有没有信得过的人可以问"]}
+];
+function tplChips(cur){
+  return `<label class="f">从模板开始（可不选）</label><div class="tpls">${TEMPLATES.map(t=>`<button class="tpl" data-act="n-tpl" data-k="${t.k}" aria-pressed="${cur===t.k}"><span>${t.e}</span>${t.n}</button>`).join("")}<button class="tpl" data-act="n-tpl" data-k="" aria-pressed="${!cur}"><span>✍️</span>空白</button></div>`;
+}
+function applyTpl(k){
+  const dr=S.drafts.new;const t=TEMPLATES.find(x=>x.k===k);
+  const prev=TEMPLATES.find(x=>x.k===dr.tpl);
+  const untouched=v=>!v.trim()||(prev&&(v===prev.ctx||prev.opts.includes(v)));
+  dr.tpl=k||"";
+  if(!t){if(prev){if(dr.context===prev.ctx)dr.context="";dr.options=dr.options.map(o=>prev.opts.includes(o)?"":o)}render();return}
+  if(untouched(dr.context))dr.context=t.ctx;
+  if(dr.options.every(untouched))dr.options=[...t.opts];
+  dr.dims=[...t.dims];render();
+}
+function tplTips(d){
+  const t=TEMPLATES.find(x=>x.k===d.tpl);if(!t)return"";
+  return `<details class="tpltips" ${S.open["tt-"+d.id]===false?"":"open"} data-tog="tt-${d.id}"><summary>${t.e} ${t.n}的人常漏掉的</summary><ul>${t.tips.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><p class="muted small" style="margin:6px 0 0">想到哪个跟你有关，就加进下面的好处或坏处。</p></details>`;
+}
+
+/* ---------- 统计：信心校准 + 后悔指数 ---------- */
+function lastReview(d){return (d.reviews||[]).filter(r=>r.done).sort((a,b)=>b.done.at.localeCompare(a.done.at))[0]||null}
+function statsData(){
+  const decided=[...S.decisions.values()].filter(d=>d.status==="decided");
+  const cal=[];const regs=[];const quads={gg:0,gb:0,bg:0,bb:0,mid:0};
+  for(const d of decided){
+    const r=lastReview(d);const c=d.snapshot&&d.snapshot.confidence;
+    if(r&&c!=null)cal.push({d,c,o:r.done.outcome,q:r.done.quality});
+    if(r){const q=r.done.quality,o=r.done.outcome;quads[q>=4&&o>=4?"gg":q>=4&&o<=2?"gb":q<=2&&o>=4?"bg":q<=2&&o<=2?"bb":"mid"]++}
+    for(const x of (d.reviews||[]).filter(x=>x.done&&x.done.regret!=null))regs.push({d,at:x.done.at,v:x.done.regret,label:x.label,key:x.key});
+  }
+  regs.sort((a,b)=>a.at.localeCompare(b.at));
+  return{decided,cal,regs,quads};
+}
+function viewStats(){
+  const {decided,cal,regs,quads}=statsData();
+  let h=`<div class="dhead"><h1>统计</h1><p class="muted small" style="margin:6px 0 0">${decided.length} 个已封存的锦囊 · ${cal.length} 个复盘过</p></div>`;
+  // 信心校准
+  h+=`<section class="step"><div class="step-h"><h2>🎯 信心校准</h2></div>`;
+  if(cal.length<3){
+    h+=`<p class="empty" style="margin:0">至少要 3 个复盘过的决定才看得出来（现在 ${cal.length} 个）。封存时拉的「信心程度」会拿来对比复盘时的「结果好坏」。</p>`;
+  }else{
+    const good=x=>x.o>=4?1:0;
+    const avgC=cal.reduce((s,x)=>s+x.c,0)/cal.length, rate=cal.reduce((s,x)=>s+good(x),0)/cal.length*100;
+    const brier=cal.reduce((s,x)=>s+Math.pow(x.c/100-good(x),2),0)/cal.length;
+    const gap=avgC-rate;
+    const verdict=gap>15?["过度自信 🤡",`你平均觉得有 ${Math.round(avgC)}% 把握，结果只有 ${Math.round(rate)}% 是好的。下次拉信心条之前，先打个折。`,"con"]
+      :gap<-15?["太悲观 🥲",`你平均只给 ${Math.round(avgC)}% 信心，结果 ${Math.round(rate)}% 都不错。你比自己以为的准。`,"pro"]
+      :["挺准的 👍",`平均信心 ${Math.round(avgC)}%，好结果 ${Math.round(rate)}%，差不多。继续保持。`,"pro"];
+    h+=`<div class="verdict ${verdict[2]}"><b>${verdict[0]}</b><p>${verdict[1]}</p></div>`;
+    const B=[[0,49,"0–49%"],[50,69,"50–69%"],[70,89,"70–89%"],[90,100,"90–100%"]];
+    h+=`<div class="calib">${B.map(([a,b,l])=>{const xs=cal.filter(x=>x.c>=a&&x.c<=b);if(!xs.length)return `<div class="cb empty"><div class="cbl">${l}</div><div class="cbn">没有</div></div>`;
+      const ac=xs.reduce((s,x)=>s+x.c,0)/xs.length, gr=xs.reduce((s,x)=>s+good(x),0)/xs.length*100;
+      return `<div class="cb"><div class="cbl">${l}<small>${xs.length} 个</small></div><div class="cbars"><div class="cbar"><i class="exp" style="width:${ac}%"></i><span>以为 ${Math.round(ac)}%</span></div><div class="cbar"><i class="act" style="width:${Math.max(gr,1)}%"></i><span>实际 ${Math.round(gr)}%</span></div></div></div>`}).join("")}</div>
+    <p class="muted small tip" style="margin:10px 0 0">「实际」= 最近一次复盘的结果好坏打了 4 或 5 分的比例。完全准的话，每一组的两条应该一样长。准确度分数（Brier）：${brier.toFixed(2)}，0 最准，0.25 等于乱猜。</p>`;
+  }
+  h+=`</section>`;
+  // 决定质量 vs 结果
+  const qn=quads.gg+quads.gb+quads.bg+quads.bb+quads.mid;
+  if(qn){
+    h+=`<section class="step"><div class="step-h"><h2>🧭 决定质量 vs 结果</h2></div>
+    <div class="quad4"><div class="q gg"><b>${quads.gg}</b>好决定<br>好结果</div><div class="q gb"><b>${quads.gb}</b>好决定<br>运气差</div><div class="q bg"><b>${quads.bg}</b>烂决定<br>狗屎运</div><div class="q bb"><b>${quads.bb}</b>烂决定<br>烂结果</div></div>
+    ${quads.mid?`<p class="muted small" style="margin:8px 0 0">另外 ${quads.mid} 个在中间地带。</p>`:""}
+    <p class="muted small tip" style="margin:8px 0 0">用每个决定最近一次复盘的分数。决定质量和结果都是 4–5 分算好，1–2 分算烂。「狗屎运」那格越多越要小心：赢了不代表决定对。</p></section>`;
+  }
+  // 后悔指数
+  h+=`<section class="step"><div class="step-h"><h2>😩 后悔指数</h2></div>`;
+  if(!regs.length){
+    h+=`<p class="empty" style="margin:0">还没有资料。以后复盘时多了一题「后悔指数 0–10」，打了分就会出现在这里。</p>`;
+  }else{
+    const avg=regs.reduce((s,x)=>s+x.v,0)/regs.length;
+    let trend="";
+    if(regs.length>=4){const half=Math.floor(regs.length/2);const a=regs.slice(0,half).reduce((s,x)=>s+x.v,0)/half,b=regs.slice(half).reduce((s,x)=>s+x.v,0)/(regs.length-half);
+      trend=b<a-0.8?`<span class="pro">越来越少后悔了 📉（${a.toFixed(1)} → ${b.toFixed(1)}）</span>`:b>a+0.8?`<span class="con">最近比较多后悔 📈（${a.toFixed(1)} → ${b.toFixed(1)}）</span>`:`差不多，没什么变化（${a.toFixed(1)} → ${b.toFixed(1)}）`;}
+    h+=`<div class="regtop"><div><b class="num">${avg.toFixed(1)}</b><small>平均 / 10</small></div><div class="small">${trend||"多复盘几次就看得出趋势。"}</div></div>`;
+    const W=340,H=150,L=26,R=10,T=12,Bm=24,n=regs.length;
+    const x=i=>n===1?(L+W-R)/2:L+i*(W-L-R)/(n-1), y=v=>T+(10-v)*(H-T-Bm)/10;
+    const path=regs.map((r,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(r.v).toFixed(1)).join("");
+    h+=`<svg class="regchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="后悔指数走势">
+      ${[0,5,10].map(v=>`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" class="grid"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`).join("")}
+      ${n>1?`<path d="${path}" class="line" pathLength="1"/>`:""}
+      ${regs.map((r,i)=>`<circle cx="${x(i)}" cy="${y(r.v)}" r="4.5" class="dot ${r.v>=7?"hi":r.v<=3?"lo":""}"><title>${esc(r.d.title)} · ${esc(r.label)}：${r.v}</title></circle>`).join("")}
+      ${regs.map((r,i)=>i===0||i===n-1||n<=6?`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${fmtShort(r.at)}</text>`:"").join("")}
+    </svg>`;
+    const stages=REVIEW_PLAN.map(p=>{const xs=regs.filter(r=>r.key===p.key);return xs.length?`<div><small>${p.label}</small><b>${(xs.reduce((s,r)=>s+r.v,0)/xs.length).toFixed(1)}</b></div>`:""}).join("");
+    if(stages)h+=`<div class="regstage">${stages}</div>`;
+    const top=regs.slice().sort((a,b)=>b.v-a.v).slice(0,3).filter(r=>r.v>=6);
+    if(top.length)h+=`<h3 style="font-size:15px;margin:14px 0 6px">最后悔的</h3>${top.map(r=>`<a class="regrow" href="#d-${r.d.id}"><span>${esc(r.d.title)}</span><b class="con">${r.v}</b></a>`).join("")}`;
+  }
+  h+=`</section>`;
+  return h;
+}
+
 /* ---------- routing ---------- */
-function route(){const h=location.hash.slice(1);if(h==="new")return{v:"new"};if(h==="backup")return{v:"backup"};if(h.startsWith("d-"))return{v:"d",id:h.slice(2)};return{v:"home"}}
+function route(){const h=location.hash.slice(1);if(h==="new")return{v:"new"};if(h==="backup")return{v:"backup"};if(h==="stats")return{v:"stats"};if(h.startsWith("d-"))return{v:"d",id:h.slice(2)};return{v:"home"}}
 
 /* ---------- render ---------- */
 let needRender=false;
@@ -926,6 +1117,7 @@ function render(){
   let html="";S.viewKey=r.v;
   if(r.v==="new")html=viewNew();
   else if(r.v==="backup")html=viewBackup();
+  else if(r.v==="stats")html=viewStats();
   else if(r.v==="d"){const d=S.decisions.get(r.id);html=d?viewDecision(d):`<div class="empty"><p>找不到这个决定，可能已经删掉了。</p><a class="btn ghost" href="#">回首页</a></div>`}
   else html=viewHome();
   app.innerHTML=html;
@@ -967,10 +1159,11 @@ function viewHome(){
 
 /* NEW */
 function viewNew(){
-  const dr=S.drafts.new||(S.drafts.new={title:"",context:"",decideBy:"",options:["",""],dims:[...S.settings.dims]});
+  const dr=S.drafts.new||(S.drafts.new={title:"",context:"",decideBy:"",options:["",""],dims:[...S.settings.dims],tpl:""});const tp=TEMPLATES.find(x=>x.k===dr.tpl);
   return `<div class="dhead"><h1>记一个新决定</h1><p class="muted small tip">建档时间会自动记下。考虑期间什么都能改，封存之后就不能了。</p></div>
+  ${tplChips(dr.tpl)}
   <label class="f" for="n-title">标题</label>
-  <input type="text" id="n-title" data-nd="title" value="${esc(dr.title)}" placeholder="例如：要不要回新加坡工作">
+  <input type="text" id="n-title" data-nd="title" value="${esc(dr.title)}" placeholder="${esc(tp?tp.ph:"例如：要不要回新加坡工作")}">
   <label class="f" for="n-ctx">情境说明</label>
   <textarea id="n-ctx" data-nd="context" placeholder="现在是什么状况？为什么要做这个决定？">${esc(dr.context)}</textarea>
   <label class="f">选项</label>
@@ -1060,7 +1253,7 @@ function viewDecision(d){
       <div class="add"><input type="text" data-draft="newopt-${d.id}" value="${esc(S.drafts["newopt-"+d.id]||"")}" placeholder="还有别的选项？"><button class="btn small ghost" data-act="addopt">加选项</button></div><div class="actions"><button class="btn small" data-act="toggle" data-key="edit-${d.id}">改好了</button></div>`;
     }
   }else if(cur===2){
-    h+=head(2,prosUpdated?`<span class="stamp-date">最后改动 ${fmt(prosUpdated)}</span>`:"");
+    h+=head(2,prosUpdated?`<span class="stamp-date">最后改动 ${fmt(prosUpdated)}</span>`:"");if(!locked)h+=tplTips(d);
     if(!locked){h+=`<details ${S.open["dims-"+d.id]?"open":""} data-tog="dims-${d.id}"><summary class="small muted" style="cursor:pointer">打分维度：${d.dims.map(k=>DIMS[k].name).join(" × ")||"没选"}（点开修改）</summary><div style="margin-top:10px">${dimChips(d.dims,"dim")}</div></details>`}
     else h+=`<p class="small muted">打分维度：${d.dims.map(k=>DIMS[k].name).join(" × ")}</p>`;
     h+=`<div style="margin-top:16px">`;
@@ -1370,7 +1563,7 @@ function viewReviews(d){
     h+=`<div class="review"><h3>${esc(r.label)} <span class="stamp-date">${r.done?"复盘于 "+fmt(r.done.at):"预定 "+fmtDay(r.due)}</span></h3>`;
     if(r.done){
       const x=r.done;
-      h+=`<dl class="rv-card"><dt>实际发生了什么</dt><dd>${esc(x.actual)||"—"}</dd><dt>后来才发现的</dt><dd>${esc(x.later)||"—"}</dd><dt>决定质量 / 结果好坏</dt><dd>${x.quality} / 5，${x.outcome} / 5</dd><dd class="quad">${quadLabel(x.quality,x.outcome)}</dd>${x.rule?`<dt>规则合理吗</dt><dd>${esc(x.rule)}</dd>`:""}${x.note?`<dt>备注</dt><dd>${esc(x.note)}</dd>`:""}</dl>`;
+      h+=`<dl class="rv-card"><dt>实际发生了什么</dt><dd>${esc(x.actual)||"—"}</dd><dt>后来才发现的</dt><dd>${esc(x.later)||"—"}</dd><dt>决定质量 / 结果好坏</dt><dd>${x.quality} / 5，${x.outcome} / 5</dd><dd class="quad">${quadLabel(x.quality,x.outcome)}</dd>${x.regret!=null?`<dt>后悔指数</dt><dd>${x.regret} / 10</dd>`:""}${x.rule?`<dt>规则合理吗</dt><dd>${esc(x.rule)}</dd>`:""}${x.note?`<dt>备注</dt><dd>${esc(x.note)}</dd>`:""}</dl>`;
     }else if(r.due<=now||S.open["rv-"+d.id+r.key]){
       const k=`rv-${d.id}-${r.key}`;const dr=S.drafts[k]||(S.drafts[k]={actual:"",later:"",quality:0,outcome:0,note:""});
       h+=`<div class="sealbox"><p class="note tip">先回头看看上面的锦囊：当时你预计的、你的信心和心情。再来写。</p>
@@ -1381,6 +1574,8 @@ function viewReviews(d){
       <div class="rate">${[1,2,3,4,5].map(n=>`<button class="pip" data-act="rv-rate" data-key="${k}" data-f="quality" data-v="${n}" aria-pressed="${dr.quality===n}">${n}</button>`).join("")}</div>
       <label class="f">结果好坏</label>
       <div class="rate">${[1,2,3,4,5].map(n=>`<button class="pip" data-act="rv-rate" data-key="${k}" data-f="outcome" data-v="${n}" aria-pressed="${dr.outcome===n}">${n}</button>`).join("")}</div>
+      <label class="f">后悔指数：现在回头看，后悔吗（可不打）</label>
+      <div class="rate r11">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="pip${n<=3?" lo":""}" data-act="rv-rate" data-key="${k}" data-f="regret" data-v="${n}" aria-pressed="${dr.regret===n}">${n}</button>`).join("")}</div><div class="rgl"><span>0 一点都不后悔</span><span>10 后悔死了</span></div>
       <label class="f">备注</label><textarea data-draft="${k}.note" style="min-height:60px">${esc(dr.note)}</textarea>
       <div class="actions"><button class="btn" data-act="rv-save" data-r="${r.key}">完成复盘</button></div></div>`;
     }else{
@@ -1400,7 +1595,7 @@ function viewReviews(d){
 function viewBackup(){
   const lb=S.settings.lastBackup;const g=S.settings.gas;
   const busy=S.busy.backup,err=S.err.backup;
-  let h=`<div class="dhead"><h1>设置</h1></div>
+  let h=`<div class="dhead"><h1>设置</h1></div>${themeSection()}
   <section class="step"><div class="step-h"><h2>账号和同步</h2></div>
   <p style="margin-top:0">${syncLine()}</p>
   ${S.syncErr&&S.sync!=="ok"?`<p class="small" style="color:var(--con);word-break:break-all">错误内容：${esc(S.syncErr)}</p>`:""}
@@ -1489,6 +1684,8 @@ async function handle(act,b){
   const d=curDecision();
   switch(act){
   case "n-addopt":S.drafts.new.options.push("");render();break;
+  case "n-tpl":applyTpl(b.dataset.k);break;
+  case "theme":setThemePref(b.dataset.v);render();break;
   case "n-delopt":S.drafts.new.options.splice(+b.dataset.i,1);render();break;
   case "n-dim":toggleIn(S.drafts.new.dims,b.dataset.k);render();break;
   case "n-create":{
@@ -1498,7 +1695,7 @@ async function handle(act,b){
     if(!dr.dims.length){toast("至少选一个打分维度");return}
     const at=nowISO();
     const nd={id:uid(),title,context:dr.context.trim(),decideBy:dr.decideBy||"",createdAt:at,status:"thinking",dims:[...dr.dims],
-      options:opts.map(n=>({id:uid(),name:n,createdAt:at,items:[]})),interview:{},log:[]};
+      options:opts.map(n=>({id:uid(),name:n,createdAt:at,items:[]})),interview:{},log:[]};if(dr.tpl)nd.tpl=dr.tpl;
     delete S.drafts.new;
     persist(nd,"建档");location.hash="d-"+nd.id;break;
   }
@@ -1779,7 +1976,7 @@ function reviewSave(d,key){
   const r=d.reviews.find(r=>r.key===key);const k=`rv-${d.id}-${key}`;const dr=S.drafts[k];
   if(!dr.quality||!dr.outcome){toast("决定质量和结果好坏都要打分");return}
   if(!dr.actual.trim()){toast("写一下实际发生了什么");return}
-  r.done={at:nowISO(),actual:dr.actual.trim(),later:dr.later.trim(),quality:dr.quality,outcome:dr.outcome,note:dr.note.trim(),rule:(dr.rule||"").trim()};
+  r.done={at:nowISO(),actual:dr.actual.trim(),later:dr.later.trim(),quality:dr.quality,outcome:dr.outcome,note:dr.note.trim(),rule:(dr.rule||"").trim()};if(dr.regret!=null)r.done.regret=dr.regret;
   delete S.drafts[k];
   persist(d,`完成${r.label}的复盘`);
   autoBackup("复盘");ceremony("review");
